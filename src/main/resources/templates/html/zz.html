@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>抢座中...</title>
+<link th:href="@{/css/login.css}" href="css/login.css" rel="stylesheet" type="text/css" media="all"/>
+<script type="text/javascript" th:src="@{/js/jquery/jquery-3.3.1.js}" src="js/jquery/jquery-3.3.1.js" ></script>
+<link rel="stylesheet" th:href="@{/css/cloudstyle.css}" href="css/cloudstyle.css"/>
+<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+<!-- layer -->
+<link type="text/css" rel="stylesheet" th:href="@{/plug/layui/css/layui.css}"/>
+<script type="text/javascript" th:src="@{/plug/layui/layui.all.js}"  src="plug/layui/layui.all.js" ></script>
+<style>
+#div1{
+	position: absolute;
+	z-index:1;
+    left: 50%;
+    top: 50%;
+    margin-left: -600px;
+    margin-top: -200px;
+    width: 1200px;
+    height: 400px;
+    line-height: 100px;
+    font-size: 36px;
+    text-align: center;
+}
+#cc{
+	width:100%;
+	font-size:64px;
+	text-align:center;
+	color: white;
+}
+</style>
+</head>
+<body>
+<div id="div1">
+	<span id="cc"></span>
+</div>
+<div class="sky" style="position:absolute; width:100%; top:0px;height:100%;opacity:0.75;"></div>
+</body>
+</html>
+
+
+<script type="text/javascript"  th:inline="javascript">
+var username = [[${u}]];
+var password = [[${p}]];
+
+var vs = [[${VIEWSTATE}]];
+var ed = [[${EVENTVALIDATION}]];
+
+var zw = [[${zw}]];
+
+function getDistanceTime(time){
+    var endTime= new Date(Date.parse(time.replace(/-/g, "/")));/*replace将时间字符串中所有的'-'替换成'/',parse将时间格式的字符串转换成毫秒*/
+    var nowTime = new Date();
+    var distance =endTime.getTime() - nowTime.getTime();/*getTime把一个date对象转换成毫秒*/
+
+    var day = 0;
+    var hour = 0;
+    var minute = 0;
+    var second = 0;
+
+    if(distance >= 0){
+        day = Math.floor(distance/1000/60/60/24);
+        hour = Math.floor(distance/1000/60/60%24);
+        minute = Math.floor(distance/1000/60%60);
+        second = Math.floor(distance/1000%60);
+    }else{
+        return "<a href='http://seat.hhit.edu.cn' target='view_window' style='color:#FFF'>预约时间已过，点我查看预约结果！</a>";
+    }
+   
+   return day + "天" +  hour + "时" + minute + "分" + second + "秒"+"<br/>"+
+   			"开始抢座";
+}
+
+function open1(){
+	//开始抢座时间
+	var H = 5;
+	var M0 = 0;	//5.0点整抢一次
+	var M = 30;	//5.30抢一次
+	var M45 = 50;//5.45抢一次
+	var S = 60;
+	
+	var date = new Date(); //获取到当前的系统时间
+	
+	var Y = date.getFullYear();//获取完整的年份(4位,1970-????)
+	var Mo = date.getMonth()+1;//获取当前月份(0-11,0代表1月)
+	var D = date.getDate();//获取当前日(1-31)
+	var W = date.getDay()+1;//获取当前星期X(0-6,0代表星期天)===要+1
+	
+	var yy = new Date(date.setDate(date.getDate()+1));
+	
+	var yyrq = yy.getFullYear()+"-"+(yy.getMonth()+1)+"-"+(yy.getDate());//日期要+1
+
+	var tt = [[${ct}]];//选择的抢座时间
+	var endTime = tt+" "+H+":"+"0:0";
+	
+	$("#cc").html(getDistanceTime(endTime));
+	var et = new Date(Date.parse(tt.replace(/-/g, "/")));
+	
+	
+	if(Y==et.getFullYear() && Mo==(et.getMonth()+1) && D==et.getDate())
+	{
+		if(date.getHours() == H){
+
+			if(date.getMinutes()>=M0 && date.getMinutes()<=(M0+3) ||
+					date.getMinutes()>=M && date.getMinutes()<=(M+3) ||
+					date.getMinutes()>=M45 && date.getMinutes()<=(M45+3)	
+			){
+				
+				var url = "http://seat.hhit.edu.cn/pages/ic/LoginForm.aspx?"
+						+"__VIEWSTATE="+encodeURIComponent(vs)
+						+"&__EVENTVALIDATION="+encodeURIComponent(ed)
+						+"&szLogonName="+username
+						+"&szMiss="+password
+						+"&Button_Logon=%E7%99%BB%E5%BD%95";
+				openURL(url);
+				setInterval(function() {
+					var date = new Date(); //获取到当前的系统时间
+					var sjc = date.valueOf();//时间戳
+					var startTime = "";
+					var endTime = "";
+					var jg = null;
+
+					if(date.getHours() == H){
+						if(date.getMinutes()>=M0 && date.getMinutes()<=(M0+3) ||
+								date.getMinutes()>=M && date.getMinutes()<=(M+3) ||
+								date.getMinutes()>=M45 && date.getMinutes()<=(M45+3)	
+						){
+							var d = new Date(); //获取到当前的系统时间
+							var sjc = d.valueOf();//时间戳
+							if(W!=3){//不是星期三
+								var s = "08";
+								var st = "800";
+								var e = "22";
+								var et = "2200";
+								var url2 = "http://seat.hhit.edu.cn/ClientWeb/pro/ajax/reserve.aspx?dialogid=&dev_id="+zw+"&lab_id=&kind_id=&room_id=&type=dev&prop=&test_id=&term=&test_name=&start=" + yyrq
+										+"+"+s+"%3A00&end="+yyrq
+										+"+"+e+"%3A00&start_time="+st+"&end_time="+et+"&up_file=&memo=666&memo=&act=set_resv&_="+sjc;
+								openURL(url2);
+							}else{//是星期三
+								//早上8点到10点
+								var url2 = "http://seat.hhit.edu.cn/ClientWeb/pro/ajax/reserve.aspx?dialogid=&dev_id="+zw+"&lab_id=&kind_id=&room_id=&type=dev&prop=&test_id=&term=&test_name=&start=" + yyrq
+								+"+08%3A00&end="+yyrq
+								+"+14%3A00&start_time=800&end_time=1400&up_file=&memo=666&memo=&act=set_resv&_="+sjc;
+								openURL(url2);
+								//晚上5点到10点
+								url2 = "http://seat.hhit.edu.cn/ClientWeb/pro/ajax/reserve.aspx?dialogid=&dev_id="+zw+"&lab_id=&kind_id=&room_id=&type=dev&prop=&test_id=&term=&test_name=&start=" + yyrq
+								+"+17%3A30&end="+yyrq
+								+"+22%3A00&start_time=1730&end_time=2200&up_file=&memo=666&memo=&act=set_resv&_="+sjc;
+								openURL(url2);
+							}
+							layer.closeAll(); //关闭所有层 
+						}
+					}
+				}, 1000*2);
+			}else{
+				layer.closeAll(); //关闭所有层 
+			}		
+		}
+	}
+}
+
+function openURL(url){
+	layer.open({
+	    type: 2,
+	    title: '抢座中......',
+	    area: ['50%', '80%'],
+	    content: url
+	});
+}
+
+function getResult(url){
+	var jg = null;
+	$.ajax({
+		type:"POST",
+		async:false,  //默认true,异步
+		data:{"url":url},
+		dataType:'json',
+		url:"/jg",
+		success:function(data){	
+			jg = data;
+	    }
+	});
+	return jg;
+}
+	
+$(function(){
+
+	var ip = returnCitySN['cip'];
+	var cname = returnCitySN['cname'];
+	$.ajax({
+		type:"POST",
+		async:true,  //默认true,异步
+		data:{"ip":ip,"cname":cname,"op":"正常抢座操作"},
+		dataType:'json',
+		url:"/tolog",
+		success:function(data){
+	    }
+	});
+	setInterval(function() {
+		//在本页打开页面
+		//window.location.href = "https://www.baidu.com/";
+		open1();
+	}, 1000*2);
+});
+
+</script>

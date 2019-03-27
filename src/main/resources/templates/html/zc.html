@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>用户注册信息</title>
+  <script type="text/javascript" th:src="@{/js/jquery/jquery-3.3.1.js}" src="js/jquery/jquery-3.3.1.js" ></script>
+  <script type="text/javascript" th:src="@{/js/zw.js}" src="js/zw.js" ></script>
+<link th:href="@{/css/login.css}" href="css/login.css" rel="stylesheet" type="text/css" media="all"/>
+<link rel="stylesheet" th:href="@{/css/cloudstyle.css}" href="css/cloudstyle.css"/>
+<!-- layer -->
+<link type="text/css" rel="stylesheet" th:href="@{/plug/layui/css/layui.css}"/>
+<script type="text/javascript" th:src="@{/plug/layui/layui.all.js}"  src="plug/layui/layui.all.js" ></script>
+<style type="text/css">
+input::-webkit-input-placeholder {
+	color:#fff;
+}
+</style>
+<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+
+</head>
+<body onkeydown="key_down(event.keyCode);">
+<div class="sky" style="position:absolute; width:100%; top:0px;height:100%;opacity:0.75;"></div>
+<div class="login-form" style="position:relative;">
+		<h1><a  href='http://seat.hhit.edu.cn' target='view_window' style='color:#FFF'>淮海工学院图书馆抢座系统V2.0</a></h1>
+		<div class="login-top">
+		<form>
+			<div class="login-ic">
+				<i class="layui-icon layui-icon-username" style="font-size: 30px; color: #fff;"></i>
+				<input type="text"  placeholder="用户名" id="u"/>
+				<div class="clear"> </div>
+			</div>
+			<div class="login-ic">
+				<i class="layui-icon layui-icon-password" style="font-size: 30px; color: #fff;"></i>
+				<input type="password"  placeholder="密码" id="p" name="p"  />
+				<div class="clear"> </div>
+			</div>
+			<div class="login-ic">
+				<i class="layui-icon layui-icon-password" style="font-size: 30px; color: #fff;"></i>
+				<input type="password"  placeholder="常用邮箱" id="p" name="p"  />
+				<div class="clear"> </div>
+			</div>
+			<div class="login-ic">
+				<i class="layui-icon layui-icon-table" style="font-size: 30px; color: #FFF;"></i>
+			      <select lay-verify="required" id = "zw1" style="width: 400px;height: 38px; margin-left: 4px;color: #000;opacity:0.7;">
+			      </select>
+				<div class="clear"> </div>
+			</div>
+			<div class="login-ic">
+				<i class="layui-icon layui-icon-table" style="font-size: 30px; color: #FFF;"></i>
+			      <select lay-verify="required" id = "zw2" style="width: 400px;height: 38px; margin-left: 4px;color: #000;opacity:0.7;">
+			      </select>
+				<div class="clear"> </div>
+			</div>
+			<div class="login-ic">
+				<i class="layui-icon layui-icon-table" style="font-size: 30px; color: #FFF;"></i>
+			      <select lay-verify="required" id = "zw3" style="width: 400px;height: 38px; margin-left: 4px;color: #000;opacity:0.7;">
+			      </select>
+				<div class="clear"> </div>
+			</div>
+			<div class="log-bwn">
+				<input type="button"  id="login1" value="提交注册信息" onclick="tijiao()">
+			</div>
+		</form>
+	</div>
+</div>
+</body>
+</html>
+
+
+<script>
+function key_down(num){
+	if(num == 13) {
+		tijiao();
+	}
+}
+
+layui.use('laydate', function(){
+  var laydate = layui.laydate;
+  //执行一个laydate实例
+  laydate.render({
+    elem: '#test1' //指定元素
+  });
+  
+});
+
+
+function tijiao(){
+	var u = $("#u").val();
+	var p = $("#p").val();
+	var zw1 = $('#zw1 option:selected').val()+"="+$('#zw1 option:selected').html();
+	var zw2 = $('#zw2 option:selected').val()+"="+$('#zw2 option:selected').html();
+	var zw3 = $('#zw3 option:selected').val()+"="+$('#zw3 option:selected').html();
+	
+	if(u&&p&&zw1!="-1=-----请选择座位-----"){
+		var ip = returnCitySN['cip'];
+		var cname = returnCitySN['cname'];
+		$.ajax({
+			type:"POST",
+			async:true,  //默认true,异步
+			data:{"ip":ip,"cname":cname,"u":u,"p":p,"zw1":zw1,"zw2":zw2,"zw3":zw3},
+			dataType:'json',
+			timeout:20000,
+			url:"/reg",
+			success:function(data){
+				layer.alert(data.message, {icon: data.result=="success"?1:2});
+		    },
+		    error:function() {
+		    	layer.alert('服务器错误,请联系开发人员！', {icon: 2});
+		    }
+		});
+	}else{
+		if(zw1=="-1=-----请选择座位-----"){
+			layer.open({
+				  title: '错误提示'
+				  ,content: '请选择座位1'
+			}); 
+		}else if(!u){
+			layer.open({
+				  title: '错误提示'
+				  ,content: '请输入用户名'
+			}); 
+		}else if(!p){
+			layer.open({
+				  title: '错误提示'
+				  ,content: '请输入密码'
+			}); 
+		}
+	}
+}
+
+$(function(){
+
+	var zw = getZW();
+	$("#zw1").html(zw);
+	$("#zw2").html(zw);
+	$("#zw3").html(zw);
+});
+</script>

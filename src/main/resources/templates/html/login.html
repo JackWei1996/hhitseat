@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>登录页面</title>
+<link th:href="@{/css/login.css}" href="css/login.css" rel="stylesheet" type="text/css" media="all"/>
+<script type="text/javascript" th:src="@{/js/jquery/jquery-3.3.1.js}" src="js/jquery/jquery-3.3.1.js" ></script>
+<link rel="stylesheet" th:href="@{/css/cloudstyle.css}" href="css/cloudstyle.css"/>
+
+<!-- layer -->
+<link type="text/css" rel="stylesheet" th:href="@{/plug/layui/css/layui.css}"/>
+<script type="text/javascript" th:src="@{/plug/layui/layui.all.js}"  src="plug/layui/layui.all.js" ></script>
+<style>
+input::-webkit-input-placeholder {
+	color:#fff;
+}
+</style>
+
+<script type="text/javascript" th:inline="javascript">
+if(window != top){
+	//session 失效 判断有没父页面，有，改变父页面地址
+	top.location.href = location.href; 
+
+}  
+	
+$(function(){
+
+	$(".index_top_div").focus();
+	
+	$("#name").on("focus", function(){
+		if($(this).attr("class") == "text_first"){
+			$(this).removeClass("text_first");
+			$(this).val("");
+		}
+	});
+	
+	$("#password").on("focus", function(){
+		if($(this).attr("class") == "text_first"){
+			$(this).parent().html("<input type='password' id='password' name='password' />");
+			document.getElementById("password").focus();
+		}
+	});
+});
+
+function login(){
+
+	if($("#param .text_first").length > 0){
+		return false;
+	}
+	
+	// 准备参数
+	var param = new Object();
+	param.username = $.trim($("#name").val());
+	param.password = $.trim($("#password").val());
+	
+	if(param.username == ""){
+		layer.alert('用户名不可为空', {icon: 0});
+		return false;
+	}else if(param.password == ""){
+		layer.alert('密码不可为空', {icon: 0});
+		return false;
+	}
+
+	$.ajax({
+		type:"POST",
+		async:true,  //默认true,异步
+		data:param,
+		dataType:'json',
+		url:"/login",
+		success:function(data){
+			if(data.result == "success"){
+				window.location.href = "/";
+			}else if(data.message == "PASSWORD_ERR" || data.message == "USERNAME_NOT_EXIST"){
+				layer.alert('用户名或密码错误', {icon: 2});
+			}else{
+				layer.alert('登陆失败！请找管理员授权!', {icon: 2});
+			}
+	    }
+	});
+}
+
+function key_down(num){
+	if(num == 13) {
+		login();
+	}
+}
+</script>
+</head>
+
+<body onkeydown="key_down(event.keyCode);">
+<div class="sky" style="position:absolute; width:100%; top:0px;height:100%;opacity:0.75;"></div>
+<div class="login-form" style="position:relative;">
+		<div class="login" >
+			<span ><img src="imgs/hhit/hhit.png" alt="hhit"  style="position: relative; left: 44%; top:-15px; width: 150px; height: 150px;"/></span>
+		</div>
+		<h1>淮海工学院图书馆抢座系统1.0</h1>
+		<div class="login-top">
+		<form>
+			<div class="login-ic">
+				<i class="layui-icon layui-icon-username" style="font-size: 30px; color: #fff;"></i>
+				<input type="text"  placeholder="用户名" id="name"/>
+				<div class="clear"> </div>
+			</div>
+			<div class="login-ic">
+				<i class="layui-icon layui-icon-password" style="font-size: 30px; color: #fff;"></i>
+				<input type="password"  placeholder="密码" id="password" name="password"  />
+				<div class="clear"> </div>
+			</div>
+		
+			<div class="log-bwn">
+				<input type="button"  id="login1" value="登录" onclick="login()">
+			</div>
+		</form>
+	</div>
+</div>
+</body>
+</html>
