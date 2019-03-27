@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jack.hhitseat.model.ResultMap;
 import com.jack.hhitseat.service.HttpClient;
+import com.jack.hhitseat.utils.LoginVerify;
 
 /**
  * class name: IndexController <BR>
@@ -31,7 +32,10 @@ public class IndexController {
 	@Autowired
 	HttpClient httpClient;
 	
-	private static String SESSION = "LOGIN_ERR"; 
+	private static String SESSION = "LOGIN_ERR";
+
+	private static String VIEWSTATE = null;
+	private static String EVENTVALIDATION = null;
 	
 	private ResultMap resultMap = new ResultMap();
 	
@@ -50,8 +54,14 @@ public class IndexController {
 		  HttpMethod method = HttpMethod.POST; 
 		  MultiValueMap<String, Object> params = new LinkedMultiValueMap<String, Object>();
 		  
-		  params.add("__VIEWSTATE","/wEPDwUJNjU0ODExMzM0ZGRgUvbey+950Xh7OEw/3GjPUybDryxCZIHQ5K66jJE7yw==");
-		  params.add("__EVENTVALIDATION", "/wEWBALjq7r5AQL36ofzAQKLh62dDwLE8+zdCFZDURdcT2Kt0SYlY4v4gQpOiMa+muRIorC4AKL3mnAV"); 
+		  if(VIEWSTATE==null || EVENTVALIDATION==null) {
+			  VIEWSTATE = LoginVerify.getVIEWSTATE();
+			  EVENTVALIDATION = LoginVerify.getEVENTVALIDATION();
+		  }
+		  
+		  
+		  params.add("__VIEWSTATE",VIEWSTATE);
+		  params.add("__EVENTVALIDATION", EVENTVALIDATION); 
 		  params.add("szLogonName", u); 
 		  params.add("szMiss", p);
 		  params.add("Button_Logon", "登录");
@@ -62,13 +72,18 @@ public class IndexController {
 			return resultMap.fail().message("用户名密码错误！");
 		}
 		
-		System.out.println(SESSION);
+		System.out.println(LoginVerify.getVIEWSTATE());
+		System.out.println(LoginVerify.getEVENTVALIDATION());
 		
-		String loginUrl = "http://seat.hhit.edu.cn/ClientWeb/xcus/ic2/Default.aspx";
-		
-		String html = httpClient.login(loginUrl, SESSION);
-		
-		System.out.println(html);
+		/*
+		 * System.out.println(SESSION);
+		 * 
+		 * String loginUrl = "http://seat.hhit.edu.cn/ClientWeb/xcus/ic2/Default.aspx";
+		 * 
+		 * String html = httpClient.login(loginUrl, SESSION);
+		 * 
+		 * System.out.println(html);
+		 */
 		
 		return resultMap.success().message("注册成功");
 	}
