@@ -36,7 +36,7 @@ input::-webkit-input-placeholder {
 			</div>
 			<div class="login-ic">
 				<i class="layui-icon layui-icon-notice" style="font-size: 30px; color: #fff;"></i>
-				<input type="password"  placeholder="常用邮箱" id="p" name="p"  />
+				<input type="text"  placeholder="常用邮箱" lay-verify="email" id="e" name="e"  />
 				<div class="clear"> </div>
 			</div>
 			<div class="login-ic">
@@ -68,18 +68,30 @@ input::-webkit-input-placeholder {
 
 
 <script>
+
+
+
+
+
 function key_down(num){
 	if(num == 13) {
 		tijiao();
 	}
 }
 
-layui.use('laydate', function(){
+layui.use(['form', 'layedit', 'laydate'], function(){
   var laydate = layui.laydate;
+  var form = layui.form;
   //执行一个laydate实例
   laydate.render({
     elem: '#test1' //指定元素
   });
+
+  	 //自定义验证规则  
+  form.verify({  
+       phone: [/^1[3|4|5|7|8]\d{9}$/, '手机必须11位，只能是数字！']  
+        ,email: [/^[a-z0-9._%-]+@([a-z0-9-]+\.)+[a-z]{2,4}$|^1[3|4|5|7|8]\d{9}$/, '邮箱格式不对']  
+  });  
   
 });
 
@@ -87,17 +99,18 @@ layui.use('laydate', function(){
 function tijiao(){
 	var u = $("#u").val();
 	var p = $("#p").val();
+	var em = $("#e").val();
 	var zw1 = $('#zw1 option:selected').val()+"="+$('#zw1 option:selected').html();
 	var zw2 = $('#zw2 option:selected').val()+"="+$('#zw2 option:selected').html();
 	var zw3 = $('#zw3 option:selected').val()+"="+$('#zw3 option:selected').html();
 	
-	if(u&&p&&zw1!="-1=-----请选择座位-----"){
+	if(em&&u&&p&&zw1!="-1=-----请选择座位-----"){
 		var ip = returnCitySN['cip'];
 		var cname = returnCitySN['cname'];
 		$.ajax({
 			type:"POST",
 			async:true,  //默认true,异步
-			data:{"ip":ip,"cname":cname,"u":u,"p":p,"zw1":zw1,"zw2":zw2,"zw3":zw3},
+			data:{"ip":ip,"cname":cname,"u":u,"p":p,"zw1":zw1,"zw2":zw2,"zw3":zw3, "em":em},
 			dataType:'json',
 			timeout:20000,
 			url:"/reg",
@@ -123,6 +136,11 @@ function tijiao(){
 			layer.open({
 				  title: '错误提示'
 				  ,content: '请输入密码'
+			}); 
+		}else if(!em){
+			layer.open({
+				  title: '错误提示'
+				  ,content: '请输入邮箱'
 			}); 
 		}
 	}

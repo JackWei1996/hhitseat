@@ -27,6 +27,7 @@ public class Login {
      * @mbg.generated Wed Mar 27 10:15:22 CST 2019
      */
     private String ip;
+    
 
     /**
      *

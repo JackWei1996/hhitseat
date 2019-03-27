@@ -3,6 +3,7 @@ package com.jack.hhitseat.mapper;
 import com.jack.hhitseat.bean.Login;
 import com.jack.hhitseat.bean.LoginExample;
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface LoginMapper {
