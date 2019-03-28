@@ -59,7 +59,6 @@ public class IndexController {
 			  EVENTVALIDATION = LoginVerify.getEVENTVALIDATION();
 		  }
 		  
-		  
 		  params.add("__VIEWSTATE",VIEWSTATE);
 		  params.add("__EVENTVALIDATION", EVENTVALIDATION); 
 		  params.add("szLogonName", u); 
@@ -72,8 +71,8 @@ public class IndexController {
 			return resultMap.fail().message("用户名密码错误！");
 		}
 		
-		System.out.println(LoginVerify.getVIEWSTATE());
-		System.out.println(LoginVerify.getEVENTVALIDATION());
+		System.out.println(VIEWSTATE);
+		System.out.println(EVENTVALIDATION);
 		
 		/*
 		 * System.out.println(SESSION);
