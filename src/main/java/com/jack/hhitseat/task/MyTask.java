@@ -11,18 +11,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
 import com.jack.hhitseat.bean.User;
 import com.jack.hhitseat.service.HttpClient;
@@ -36,117 +35,56 @@ import com.jack.hhitseat.utils.MyUtils;
  */
 @Component
 @Controller
-@EnableScheduling
+@EnableScheduling   // 开启定时任务
+@EnableAsync        // 开启多线程
 public class MyTask {
 	@Autowired
 	HttpClient httpClient;
 	@Autowired
 	private UserServiceImpl userService;
+	private final Logger logger = LoggerFactory.getLogger(MyTask.class);
 	
 	private static Map<String, String> sessionMap = new HashMap<>();
 	private static String VIEWSTATE = null;
 	private static String EVENTVALIDATION = null;
 	
-	//3.添加定时任务
-    @Scheduled(cron = "0 30 5 * * ?")
+	private static List<User> users = new ArrayList<>();
+	
+	//添加定时任务
+   // @Scheduled(cron = "0 0,29,30 5 * * ? ")
+    @Scheduled(cron = "0 57,58,50 13 * * ?")
 	public void myTask() {
-		System.out.println("启动定时任务1");
-		
-		List<User> users = userService.getAllUserByDo();
-		
-		for (User user : users) {
-			sessionMap.put(user.getStuNum(), login(user.getStuNum(), user.getPassword()));
-		}
-		
-		for (int i = 0; i < 30; i++) {
-			Iterator<User> it = users.iterator();
-			while(users.size()>0) {			
-				while(it.hasNext()){
-					User u = it.next();
-					String tem = u.getSeat();
-					String[] seats = tem.split(",");
-					for (String str : seats) {
-						String seat = str.split("=")[0];
-						String result = qz(sessionMap.get(u.getStuNum()),seat);
-						System.out.println(u.getUserName()+"==="+result);
-					}
-				}
-			}
-			
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		for (User u : users) {
+			String tem = u.getSeat();
+			String[] seats = tem.split(",");
+			for (String str : seats) {
+				String seat = str.split("=")[0];
+				String result = qz(sessionMap.get(u.getStuNum()),seat);
+				logger.info("{}==={}",u.getUserName(),result.split("\"msg\":\"")[1].split("\",\"data\":")[0]);
 			}
 		}
+		logger.info("抢座完毕");
 	}
     
-  //3.添加定时任务
-    @Scheduled(cron = "0 35 5 * * ?")
-	public void myTask2() {
-		System.out.println("启动定时任务2");
-		
-		List<User> users = userService.getAllUserByDo();
-		
-		for (User user : users) {
-			sessionMap.put(user.getStuNum(), login(user.getStuNum(), user.getPassword()));
-		}
-		
-		for (int i = 0; i < 30; i++) {
-			Iterator<User> it = users.iterator();
-			while(users.size()>0) {			
-				while(it.hasNext()){
-					User u = it.next();
-					String tem = u.getSeat();
-					String[] seats = tem.split(",");
-					for (String str : seats) {
-						String seat = str.split("=")[0];
-						String result = qz(sessionMap.get(u.getStuNum()),seat);
-						System.out.println(u.getUserName()+"==="+result);
-					}
-				}
-			}
-			
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+   	//@Scheduled(cron = "0 55 4 * * ? ")
+    @Scheduled(cron = "0 56 13 * * ?") 
+    public void dl1() {
+    	logger.info("登录任务1");
+    	init();
+    }
     
-    @Scheduled(cron = "0 45 5 * * ?")
-	public void myTask3() {
-		System.out.println("启动定时任务3");
-		
-		List<User> users = userService.getAllUserByDo();
-		
+    @Scheduled(cron = "0 25 5 * * ?") 
+    public void dl2() {
+    	logger.info("登录任务2");
+    	init();
+    }
+    
+    public void init() {
+    	users = userService.getAllUserByDo();
 		for (User user : users) {
 			sessionMap.put(user.getStuNum(), login(user.getStuNum(), user.getPassword()));
 		}
-		
-		for (int i = 0; i < 30; i++) {
-			Iterator<User> it = users.iterator();
-			while(users.size()>0) {			
-				while(it.hasNext()){
-					User u = it.next();
-					String tem = u.getSeat();
-					String[] seats = tem.split(",");
-					for (String str : seats) {
-						String seat = str.split("=")[0];
-						String result = qz(sessionMap.get(u.getStuNum()),seat);
-						System.out.println(u.getUserName()+"==="+result);
-					}
-				}
-			}
-			
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+    }
     
     public String login(String stuNum, String pass) {
     	if(VIEWSTATE==null || EVENTVALIDATION==null) {
@@ -163,12 +101,8 @@ public class MyTask {
 		  params.add("szMiss", pass);
 		  params.add("Button_Logon", "登录");
 		  
-		String session = httpClient.client(url, method, params);
-		
-		return session;
+		return httpClient.client(url, method, params);
     }
-    
-    
     
     public String qz(String session, String seat) {
 
