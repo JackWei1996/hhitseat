@@ -3,6 +3,9 @@
  */
 package com.jack.hhitseat.service;
 
+import java.util.List;
+
+import com.jack.hhitseat.bean.User;
 import com.jack.hhitseat.model.ResultMap;
 
 /**
@@ -10,5 +13,9 @@ import com.jack.hhitseat.model.ResultMap;
  *
  */
 public interface UserService {
-	public ResultMap login(String username, String password);
+	public List<User> getUserByNum(String num);
+
+	public void addUser(User user);
+	
+	public List<User> getAllUserByDo();
 }

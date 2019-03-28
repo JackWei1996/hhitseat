@@ -3,6 +3,7 @@ package com.jack.hhitseat.mapper;
 import com.jack.hhitseat.bean.Log;
 import com.jack.hhitseat.bean.LogExample;
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface LogMapper {

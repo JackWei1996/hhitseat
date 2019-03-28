@@ -3,6 +3,7 @@ package com.jack.hhitseat.mapper;
 import com.jack.hhitseat.bean.User;
 import com.jack.hhitseat.bean.UserExample;
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface UserMapper {
