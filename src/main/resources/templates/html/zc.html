@@ -14,7 +14,7 @@
 input::-webkit-input-placeholder {
 	color:#fff;
 }
-.div-a{ position:absolute; left:10px; top:10px; background:#00F;padding: 5px;color: #FFF}  
+.div-a{ position:absolute; left:10px; top:10px; background:#F00;padding: 5px;color: #FFF}  
 .div-b{ position:absolute; right:10px; top:10px; background:#F00;padding: 5px;color: #FFF} 
 </style>
 <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
@@ -133,22 +133,22 @@ function tijiao(){
 		if(zw1=="-1=-----请选择座位-----"){
 			layer.open({
 				  title: '错误提示'
-				  ,content: '请选择座位1'
+				  ,content: '第一个座位为必选项！'
 			}); 
 		}else if(!u){
 			layer.open({
 				  title: '错误提示'
-				  ,content: '请输入用户名'
+				  ,content: '请输入登录用户名'
 			}); 
 		}else if(!p){
 			layer.open({
 				  title: '错误提示'
-				  ,content: '请输入密码'
+				  ,content: '请输入登录密码'
 			}); 
 		}else if(!em){
 			layer.open({
 				  title: '错误提示'
-				  ,content: '请输入邮箱'
+				  ,content: '请输入邮箱地址'
 			}); 
 		}
 	}
