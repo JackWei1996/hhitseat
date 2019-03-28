@@ -51,8 +51,7 @@ public class MyTask {
 	private static List<User> users = new ArrayList<>();
 	
 	//添加定时任务
-   // @Scheduled(cron = "0 0,29,30 5 * * ? ")
-    @Scheduled(cron = "0 57,58,50 13 * * ?")
+    @Scheduled(cron = "0 0,29,30,31 5 * * ? ")
 	public void myTask() {
 		for (User u : users) {
 			String tem = u.getSeat();
@@ -66,8 +65,7 @@ public class MyTask {
 		logger.info("抢座完毕");
 	}
     
-   	//@Scheduled(cron = "0 55 4 * * ? ")
-    @Scheduled(cron = "0 56 13 * * ?") 
+   	@Scheduled(cron = "0 55 4 * * ? ")
     public void dl1() {
     	logger.info("登录任务1");
     	init();
