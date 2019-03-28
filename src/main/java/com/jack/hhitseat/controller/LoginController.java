@@ -208,4 +208,9 @@ public class LoginController {
 			}
 		}
     }
+    
+    @RequestMapping(value = "/jz")
+    public String jz(Model model) {
+    	return "jz";
+    }
 }
