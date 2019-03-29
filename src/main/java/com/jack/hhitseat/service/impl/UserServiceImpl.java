@@ -64,5 +64,16 @@ public class UserServiceImpl implements UserService {
 		
 		return user;
 	}
+
+	public void updateUser(User user) {
+		UserExample example = new UserExample();
+		example.createCriteria().andIdEqualTo(user.getId());
+		
+		try {			
+			userMapper.updateByExampleSelective(user, example);
+		} catch (Exception e) {
+			logger.error("更新用户异常",e);
+		}
+	}
 	
 }
