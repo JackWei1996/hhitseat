@@ -121,8 +121,8 @@ public class LoginController {
     
     @RequestMapping(value = "/tolog")
     @ResponseBody
-    public String tolog(String ip, String cname, String op) {
-    	logger.warn("{}---[{}]---[{}]",op, ip, cname);
+    public String tolog(String ip, String cname, String op, String u, String zw) {
+    	logger.warn("{}---[{}]---[{}]---[{}]---[{}]",op, ip, cname, u, zw);
     	return "-.-";
     }
     
@@ -209,8 +209,28 @@ public class LoginController {
 		}
     }
     
+     /**
+     * Method name: jz <BR>
+     * Description: 捐助页面 <BR>
+     * @param model
+     * @return  String<BR>
+     */
     @RequestMapping(value = "/jz")
     public String jz(Model model) {
     	return "jz";
+    }
+    
+    
+     /**
+     * Method name: login <BR>
+     * Description: 登录验证 <BR>
+     * @param model
+     * @return  String<BR>
+     */
+    @RequestMapping(value = "/login")
+    public String login(String username, String password) {
+    	System.out.println(username);
+    	System.out.println(password);
+    	return "gr";
     }
 }
