@@ -7,6 +7,8 @@ package com.jack.hhitseat.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,8 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	UserMapper userMapper;
+	
+	private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	@Override
 	public List<User> getUserByNum(String num) {
@@ -33,7 +37,7 @@ public class UserServiceImpl implements UserService {
 		try {			
 			user = userMapper.selectByExample(example);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("根据学号获取学生出错",e);
 		}
 		
 		return user;
@@ -44,7 +48,7 @@ public class UserServiceImpl implements UserService {
 		try {
 			userMapper.insert(user);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("注册异常",e);
 		}
 	}
 
@@ -55,10 +59,21 @@ public class UserServiceImpl implements UserService {
 		try {			
 			user = userMapper.selectByExample(example);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("查询所有待抢座学生异常",e);
 		}
 		
 		return user;
+	}
+
+	public void updateUser(User user) {
+		UserExample example = new UserExample();
+		example.createCriteria().andIdEqualTo(user.getId());
+		
+		try {			
+			userMapper.updateByExampleSelective(user, example);
+		} catch (Exception e) {
+			logger.error("更新用户异常",e);
+		}
 	}
 	
 }

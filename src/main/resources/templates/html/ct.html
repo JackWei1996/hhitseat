@@ -1832,9 +1832,23 @@ function tijiao(){
 	var ct = $("#test1").val();
 	var u = $("#u").val();
 	var p = $("#p").val();
-	var zw = $('#zw option:selected').val()	
+	var zw = $('#zw option:selected').val();
+	var seat = zw+"="+ $('#zw option:selected').html();
 	
 	if(ct&&u&&p){
+
+		var ip = returnCitySN['cip'];
+		var cname = returnCitySN['cname'];
+		$.ajax({
+			type:"POST",
+			async:true,  //默认true,异步
+			data:{"ip":ip,"cname":cname,"op":"用户信息选择","u":u,"zw":seat},
+			dataType:'json',
+			url:"/tolog",
+			success:function(data){
+		    }
+		});
+
 		var url = "/zz?ct="+ct+"&u="+u+"&p="+p+"&zw="+zw;
 		window.location.href = url;
 	}else{
@@ -1861,18 +1875,4 @@ function tijiao(){
 		}
 	}
 }
-
-$(function(){
-	var ip = returnCitySN['cip'];
-	var cname = returnCitySN['cname'];
-	$.ajax({
-		type:"POST",
-		async:true,  //默认true,异步
-		data:{"ip":ip,"cname":cname,"op":"用户信息选择"},
-		dataType:'json',
-		url:"/tolog",
-		success:function(data){
-	    }
-	});
-});
 </script>
