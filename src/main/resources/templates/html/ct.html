@@ -40,8 +40,8 @@ input::-webkit-input-placeholder {
 	text-transform:uppercase;
 }
 
-.div-a{ position:absolute; left:10px; top:10px; background:#00F;padding: 5px;color: #FFF}  
-.div-b{ position:absolute; right:10px; top:10px; background:#F00;padding: 5px;color: #FFF}  
+.div-a{ position:fixed; left:10px; top:20px; background:#00F;padding: 10px;color: #FFF;z-index: 999}  
+.div-b{ position:fixed; right:10px; top:20px; background:#F00;padding: 10px;color: #FFF;z-index: 999}  
 </style>
 <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
 
@@ -1807,6 +1807,19 @@ function ceshi(){
 		var h = nowTime.getHours();//获取当前小时数(0-23)
 		var m = nowTime.getMinutes(); //获取当前分钟数(0-59)
 		var url = "/tt?ct="+ct+"&u="+u+"&p="+p+"&zw="+zw+"&H="+h+"&M="+(m+1)+"&S="+10;
+		var seat = $('#zw option:selected').html();
+		var ip = returnCitySN['cip'];
+		var cname = returnCitySN['cname'];
+		$.ajax({
+			type:"POST",
+			async:true,  //默认true,异步
+			data:{"ip":ip,"cname":cname,"op":"用户测试","u":u,"zw":seat},
+			dataType:'json',
+			url:"/tolog",
+			success:function(data){
+		    }
+		});
+
 		window.location.href = url;
 	}else{
 		if(zw=="-1"){
@@ -1833,7 +1846,7 @@ function tijiao(){
 	var u = $("#u").val();
 	var p = $("#p").val();
 	var zw = $('#zw option:selected').val();
-	var seat = zw+"="+ $('#zw option:selected').html();
+	var seat = $('#zw option:selected').html();
 	
 	if(ct&&u&&p){
 

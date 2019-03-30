@@ -55,6 +55,7 @@ public class UserServiceImpl implements UserService {
 	public List<User> getAllUserByDo() {
 		UserExample example = new UserExample();
 		example.createCriteria().andIsdoEqualTo(1);
+		example.setOrderByClause("seat ASC");
 		List<User> user = new ArrayList<>();
 		try {			
 			user = userMapper.selectByExample(example);

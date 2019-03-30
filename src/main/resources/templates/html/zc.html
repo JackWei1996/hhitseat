@@ -14,8 +14,8 @@
 input::-webkit-input-placeholder {
 	color:#fff;
 }
-.div-a{ position:absolute; left:10px; top:10px; background:#F00;padding: 5px;color: #FFF}  
-.div-b{ position:absolute; right:10px; top:10px; background:#F00;padding: 5px;color: #FFF} 
+.div-a{ position:fixed; left:20px; top:20px; background:#F00;padding: 10px;color: #FFF;z-index: 999}  
+.div-b{ position:fixed; right:20px; top:20px; background:#F00;padding: 10px;color: #FFF;z-index: 999} 
 </style>
 <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
 
@@ -76,10 +76,6 @@ input::-webkit-input-placeholder {
 
 
 <script>
-
-
-
-
 
 function key_down(num){
 	if(num == 13) {

@@ -23,8 +23,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import com.jack.hhitseat.bean.Log;
 import com.jack.hhitseat.bean.User;
 import com.jack.hhitseat.service.HttpClient;
+import com.jack.hhitseat.service.impl.LogServiceImpl;
 import com.jack.hhitseat.service.impl.UserServiceImpl;
 import com.jack.hhitseat.utils.LoginVerify;
 import com.jack.hhitseat.utils.MyUtils;
@@ -42,6 +44,8 @@ public class MyTask {
 	HttpClient httpClient;
 	@Autowired
 	private UserServiceImpl userService;
+	@Autowired
+	private LogServiceImpl logServiceImpl;
 	private final Logger logger = LoggerFactory.getLogger(MyTask.class);
 	
 	private static Map<String, String> sessionMap = new HashMap<>();
@@ -51,7 +55,7 @@ public class MyTask {
 	private static List<User> users = new ArrayList<>();
 	
 	//添加定时任务
-    @Scheduled(cron = "0 0,29,30,31 5 * * ? ")
+    @Scheduled(cron = "0 30 5 * * ? ")
 	public void myTask() {
 		for (User u : users) {
 			String tem = u.getSeat();
@@ -59,29 +63,48 @@ public class MyTask {
 			for (String str : seats) {
 				String seat = str.split("=")[0];
 				String result = qz(sessionMap.get(u.getStuNum()),seat);
-				logger.info("{}==={}",u.getUserName(),result.split("\"msg\":\"")[1].split("\",\"data\":")[0]);
+				String msg = result.split("\"msg\":\"")[1].split("\",\"data\":")[0];
+				if(msg.contains("成功")) {
+					Log log = new Log();
+					log.setStatus(1);
+					log.setUserId(Integer.parseInt(u.getStuNum()));
+					log.setCreateTime(MyUtils.getNowDateTime());
+					log.setCount(Integer.parseInt(seat));
+					logServiceImpl.addLog(log);
+					break;
+				}	
+				logger.warn("{}==={}==={}",u.getUserName(),msg,str.split("=")[1]);
 			}
 		}
-		logger.info("抢座完毕");
+		logger.warn("抢座完毕");
 	}
     
-   	@Scheduled(cron = "0 55 4 * * ? ")
-    public void dl1() {
-    	logger.info("登录任务1");
-    	init();
-    }
+	/*
+	 * @Scheduled(cron = "0 55 4 * * ? ") //@Scheduled(cron="0 56 19 * * ? ") public
+	 * void dl1() { logger.warn("登录任务1"); init(); }
+	 */
     
-    @Scheduled(cron = "0 25 5 * * ?") 
+    @Scheduled(cron = "0 23 5 * * ?") 
     public void dl2() {
-    	logger.info("登录任务2");
+    	logger.warn("启动登录任务");
     	init();
     }
     
     public void init() {
     	users = userService.getAllUserByDo();
-		for (User user : users) {
-			sessionMap.put(user.getStuNum(), login(user.getStuNum(), user.getPassword()));
-		}
+    	
+    	Iterator<User> it = users.iterator();
+    	while(it.hasNext()){
+    		User user = it.next();
+    		String s = login(user.getStuNum(), user.getPassword());
+			if(!s.equals("LOGIN_ERR")) {//正常
+				sessionMap.put(user.getStuNum(), s);
+			}else {
+				it.remove();
+				user.setIsdo(0);
+				userService.updateUser(user);
+			}
+    	}
     }
     
     public String login(String stuNum, String pass) {
@@ -131,7 +154,6 @@ public class MyTask {
 			qzParparamMap.put("end_time","1400");
 			qzParparamMap.put("act","set_resv"); 
 			qzParparamMap.put("_",sjc);
-			
 			
 			r = httpClient.qz2(url2, session, qzParparamMap);
 			

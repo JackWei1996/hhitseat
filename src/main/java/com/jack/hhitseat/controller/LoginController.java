@@ -24,7 +24,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.jack.hhitseat.bean.Log;
+import com.jack.hhitseat.bean.Login;
 import com.jack.hhitseat.model.ResultMap;
+import com.jack.hhitseat.service.impl.LogServiceImpl;
+import com.jack.hhitseat.service.impl.LoginServiceImpl;
+import com.jack.hhitseat.utils.MyUtils;
 
 
 /**
@@ -38,6 +43,9 @@ import com.jack.hhitseat.model.ResultMap;
 public class LoginController {
 	@Autowired
     private ResultMap resultMap;
+	
+	@Autowired
+	private LoginServiceImpl loginServiceImpl;
 
     private final Logger logger = LoggerFactory.getLogger(LoginController.class);
     
@@ -122,7 +130,13 @@ public class LoginController {
     @RequestMapping(value = "/tolog")
     @ResponseBody
     public String tolog(String ip, String cname, String op, String u, String zw) {
-    	logger.warn("{}---[{}]---[{}]---[{}]---[{}]",op, ip, cname, u, zw);
+    	Login login = new Login();
+    	login.setLoginTime(MyUtils.getNowDateTime());
+    	if(u!=null) {    		
+    		login.setUserId(Integer.parseInt(u));
+    	}
+    	login.setIp(ip+"="+cname+"="+op+"="+zw);
+    	loginServiceImpl.addLogin(login);
     	return "-.-";
     }
     

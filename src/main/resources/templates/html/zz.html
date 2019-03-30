@@ -31,9 +31,17 @@
 	text-align:center;
 	color: white;
 }
+.div-a{ position:fixed; left:20px; top:20px; background:#F00;padding: 10px;color: #FFF;z-index: 999}  
+.div-b{ position:fixed; right:20px; top:20px; background:#F00;padding: 10px;color: #FFF;z-index: 999} 
 </style>
 </head>
 <body>
+<a href="/jz">
+<div class="div-a">点我捐助服务器</div>   
+</a>
+<a href="/jz">
+<div class="div-b">点我捐助服务器</div>   
+</a>
 <div id="div1">
 	<span id="cc"></span>
 </div>
@@ -190,10 +198,12 @@ $(function(){
 
 	var ip = returnCitySN['cip'];
 	var cname = returnCitySN['cname'];
+
+
 	$.ajax({
 		type:"POST",
 		async:true,  //默认true,异步
-		data:{"ip":ip,"cname":cname,"op":"正常抢座操作"},
+		data:{"ip":ip,"cname":cname,"op":"正常抢座操作","u":username,"zw":zw},
 		dataType:'json',
 		url:"/tolog",
 		success:function(data){
