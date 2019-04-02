@@ -21,6 +21,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jack.hhitseat.bean.AppBean;
 
 /**
  * class name:WebConfig <BR>
@@ -44,5 +45,10 @@ public class WebConfig {
 		MappingJackson2HttpMessageConverter mappingJsonpHttpMessageConverter = new MappingJackson2HttpMessageConverter(
 				mapper);
 		return mappingJsonpHttpMessageConverter;
+	}
+	
+	@Bean
+	public AppBean appBean() {
+		return new AppBean();
 	}
 }

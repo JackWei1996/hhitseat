@@ -57,7 +57,8 @@ public class MyTask {
 	private static List<User> users = new ArrayList<>();
 	
 	//添加定时任务
-    @Scheduled(cron = "0 30 5 * * ? ")
+    //@Scheduled(cron = "0 30 5 * * ? ")
+	@Scheduled(cron = "0 22 10 * * ? ")
 	public void myTask() {
 		for (User u : users) {
 			//多线程抢座
@@ -65,7 +66,8 @@ public class MyTask {
 		}
 	}
 
-    @Scheduled(cron = "0 23 5 * * ?") 
+   // @Scheduled(cron = "0 23 5 * * ?") 
+	@Scheduled(cron = "0 21 10 * * ? ")
     public void dl2() {
     	logger.warn("启动登录任务");
     	init();

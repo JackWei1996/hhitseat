@@ -24,7 +24,7 @@ import com.jack.hhitseat.service.ILogService;
  * @version 1.0  2019年3月29日 下午1:01:05
  * @author Aisino)weihaohao
  */
-@Service
+@Service("logServiceImpl")
 public class LogServiceImpl implements ILogService {
 	
 	@Autowired

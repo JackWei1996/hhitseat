@@ -16,9 +16,8 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 
+import com.jack.hhitseat.bean.AppBean;
 import com.jack.hhitseat.bean.Log;
 import com.jack.hhitseat.bean.User;
 import com.jack.hhitseat.service.HttpClient;
@@ -31,17 +30,15 @@ import com.jack.hhitseat.utils.MyUtils;
  * @version 1.0  2019年4月1日 上午8:57:03
  * @author Aisino)weihaohao
  */
-@Controller
+//为了线程安全，不能依赖注入！！！
 public class MyRunnable extends Thread {
 	private static final Logger logger = LoggerFactory.getLogger(MyRunnable.class);
-	@Autowired
-	private static LogServiceImpl logServiceImpl = new LogServiceImpl();
+	private static LogServiceImpl logServiceImpl = (LogServiceImpl) AppBean.getBean("logServiceImpl");
 	private static HttpClient httpClient = new HttpClient();
 	private Map<String, String> sessionMap = new HashMap<>();
 	private User u;
 	
 	public MyRunnable() {
-		
 	}
 	
 	public MyRunnable(User u, Map<String, String> sessionMap ) {
@@ -51,7 +48,6 @@ public class MyRunnable extends Thread {
 	
 	@Override
 	public void run() {
-		System.out.println(u.getStuNum());
 		String tem = u.getSeat();
 		String[] seats = tem.split(",");
 		for (String str : seats) {
@@ -70,6 +66,7 @@ public class MyRunnable extends Thread {
 			logger.warn("{}==={}==={}",u.getUserName(),msg,str.split("=")[1]);
 		}
 	}
+	
 	
 	public String qz(String session, String seat) {
 
