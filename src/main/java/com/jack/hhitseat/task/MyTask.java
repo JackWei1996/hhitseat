@@ -4,8 +4,6 @@
 package com.jack.hhitseat.task;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -25,13 +23,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import com.jack.hhitseat.bean.Log;
 import com.jack.hhitseat.bean.User;
 import com.jack.hhitseat.service.HttpClient;
-import com.jack.hhitseat.service.impl.LogServiceImpl;
 import com.jack.hhitseat.service.impl.UserServiceImpl;
 import com.jack.hhitseat.utils.LoginVerify;
-import com.jack.hhitseat.utils.MyUtils;
 
 /**
  * @author 19604
@@ -57,24 +52,31 @@ public class MyTask {
 	private static List<User> users = new ArrayList<>();
 	
 	//添加定时任务
-    //@Scheduled(cron = "0 30 5 * * ? ")
-	@Scheduled(cron = "0 22 10 * * ? ")
+    @Scheduled(cron = "0 30 5 * * ? ")
 	public void myTask() {
+    	logger.warn("------启动抢座");
 		for (User u : users) {
 			//多线程抢座
 			executorService.execute(new MyRunnable(u, sessionMap));
 		}
 	}
 
-   // @Scheduled(cron = "0 23 5 * * ?") 
-	@Scheduled(cron = "0 21 10 * * ? ")
+    @Scheduled(cron = "0 20 5 * * ?") 
     public void dl2() {
-    	logger.warn("启动登录任务");
+    	logger.warn("++++++启动登录");
     	init();
+    	logger.warn("++++++结束登录");
     }
     
     public void init() {
+    	sessionMap.clear();
+    	VIEWSTATE = null;
+    	EVENTVALIDATION = null;
+    	users.clear();
+    	
     	users = userService.getAllUserByDo();
+    	
+    	logger.warn("本次抢座人数===", users.size());
     	
     	Iterator<User> it = users.iterator();
     	while(it.hasNext()){
@@ -87,13 +89,16 @@ public class MyTask {
 				user.setIsdo(0);
 				userService.updateUser(user);
 			}
+			logger.warn(user.getUserName(), "===Session===", s);
     	}
     }
     
     public String login(String stuNum, String pass) {
     	if(VIEWSTATE==null || EVENTVALIDATION==null) {
-			  VIEWSTATE = LoginVerify.getVIEWSTATE();
-			  EVENTVALIDATION = LoginVerify.getEVENTVALIDATION();
+			VIEWSTATE = LoginVerify.getVIEWSTATE();
+			EVENTVALIDATION = LoginVerify.getEVENTVALIDATION();
+		    logger.warn("VIEWSTATE ==== ", VIEWSTATE);
+		    logger.warn("EVENTVALIDATION ==== ", EVENTVALIDATION);
 		}
     	 String url = "http://seat.hhit.edu.cn/pages/ic/LoginForm.aspx"; 
 		  HttpMethod method = HttpMethod.POST; 

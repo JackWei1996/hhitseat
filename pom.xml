@@ -11,7 +11,7 @@
 	<groupId>com.example</groupId>
 	<artifactId>hhitseat</artifactId>
 	<version>2.2</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 	<name>hhitseat</name>
 	<description>淮海工学院图书馆在线自动预约系统---jack魏</description>
 
@@ -123,7 +123,7 @@
 			</plugin>
 		</plugins>
 		<resources>
-		<resource>
+		<!-- <resource>
 			<directory>src/main/java</directory>
 			<includes>
 				<include>**/*.xml</include>
@@ -131,7 +131,7 @@
 		</resource>
 		<resource>
 			<directory>${project.basedir}/src/main/resources</directory>
-		</resource>
+		</resource> -->
 	</resources>
 	</build>
 	<!-- 

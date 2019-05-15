@@ -62,7 +62,24 @@ public class MyRunnable extends Thread {
 				log.setCount(Integer.parseInt(seat));
 				logServiceImpl.addLog(log);
 				break;
-			}	
+			}else if(msg.contains("未登录")) {
+				logger.warn("Session超时==={}",u.getUserName());
+				MyTask task = new MyTask();
+				String session = task.login(u.getStuNum(), u.getPassword());
+				sessionMap.put(u.getStuNum(), session);
+				seat = str.split("=")[0];
+				result = qz(session,seat);
+				msg = result.split("\"msg\":\"")[1].split("\",\"data\":")[0];
+				if(msg.contains("成功")) {
+					Log log = new Log();
+					log.setStatus(1);
+					log.setUserId(Integer.parseInt(u.getStuNum()));
+					log.setCreateTime(MyUtils.getNowDateTime());
+					log.setCount(Integer.parseInt(seat));
+					logServiceImpl.addLog(log);
+					break;
+				}
+			}
 			logger.warn("{}==={}==={}",u.getUserName(),msg,str.split("=")[1]);
 		}
 	}

@@ -24,8 +24,8 @@ import org.springframework.web.client.RestTemplate;
 public class LoginVerify {
 	
 	static String body = null;
-	static String VIEWSTATE = "/wEPDwUJNjU0ODExMzM0ZGRgUvbey+950Xh7OEw/3GjPUybDryxCZIHQ5K66jJE7yw==";
-	static String EVENTVALIDATION = "/wEWBALjq7r5AQL36ofzAQKLh62dDwLE8+zdCFZDURdcT2Kt0SYlY4v4gQpOiMa+muRIorC4AKL3mnAV";
+	static String VIEWSTATE = "/wEPDwUJNjU0ODExMzM0ZGQfKz+nYo4XQMFAENFjh2BOCkXk0fYoklhR6Vtc9kqiLg==";
+	static String EVENTVALIDATION = "/wEWBAKC8vr8DQL36ofzAQKLh62dDwLE8+zdCBkC9Dgcs1P2tigAuqNqVFJg2BdHUxxBJiq+6hpiM5CU";
 	
 	public static String getBody() {
 		HttpHeaders headers = new HttpHeaders();
