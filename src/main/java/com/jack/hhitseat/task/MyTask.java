@@ -55,6 +55,9 @@ public class MyTask {
     @Scheduled(cron = "0 30 5 * * ? ")
 	public void myTask() {
     	logger.warn("------启动抢座");
+    	if(users.size()==0) {
+    		init();
+    	}
 		for (User u : users) {
 			//多线程抢座
 			executorService.execute(new MyRunnable(u, sessionMap));
@@ -75,8 +78,7 @@ public class MyTask {
     	users.clear();
     	
     	users = userService.getAllUserByDo();
-    	
-    	logger.warn("本次抢座人数===", users.size());
+    	logger.warn("本次抢座人数==={}", users.size());
     	
     	Iterator<User> it = users.iterator();
     	while(it.hasNext()){
@@ -89,7 +91,7 @@ public class MyTask {
 				user.setIsdo(0);
 				userService.updateUser(user);
 			}
-			logger.warn(user.getUserName(), "===Session===", s);
+			logger.warn("{}===Session==={}", user.getUserName(), s);
     	}
     }
     
@@ -97,8 +99,8 @@ public class MyTask {
     	if(VIEWSTATE==null || EVENTVALIDATION==null) {
 			VIEWSTATE = LoginVerify.getVIEWSTATE();
 			EVENTVALIDATION = LoginVerify.getEVENTVALIDATION();
-		    logger.warn("VIEWSTATE ==== ", VIEWSTATE);
-		    logger.warn("EVENTVALIDATION ==== ", EVENTVALIDATION);
+		    logger.warn("VIEWSTATE ==== {}", VIEWSTATE);
+		    logger.warn("EVENTVALIDATION ==== {}", EVENTVALIDATION);
 		}
     	 String url = "http://seat.hhit.edu.cn/pages/ic/LoginForm.aspx"; 
 		  HttpMethod method = HttpMethod.POST; 

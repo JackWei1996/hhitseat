@@ -43,7 +43,7 @@ public class MyBatisConfiguration {
         // 设置mybatis的主配置文件
         sqlSessionFactoryBean.setConfigLocation(new ClassPathResource("mybatis/mybatis-config.xml"));   
         // 设置别名包
-        sqlSessionFactoryBean.setTypeAliasesPackage("com.jack.hhitseat");
+        sqlSessionFactoryBean.setTypeAliasesPackage("com.jack.hhitseat.mapper");
         return sqlSessionFactoryBean;
     }
 
@@ -57,7 +57,7 @@ public class MyBatisConfiguration {
     @ConditionalOnBean(SqlSessionFactoryBean.class)
     public MapperScannerConfigurer mapperScannerConfigurer() {
         MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
-        mapperScannerConfigurer.setBasePackage("com.jack.hhitseat");
+        mapperScannerConfigurer.setBasePackage("com.jack.hhitseat.mapper");
         return mapperScannerConfigurer;
     }
 }

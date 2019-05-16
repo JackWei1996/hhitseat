@@ -347,4 +347,12 @@
       create_time = #{createTime,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+   <select id="getAllUserByDo"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where isdo = 1
+    ORDER BY seat DESC
+  </select>
 </mapper>

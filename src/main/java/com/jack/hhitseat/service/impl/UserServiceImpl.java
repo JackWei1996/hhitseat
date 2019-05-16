@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
 		example.createCriteria().andIsdoEqualTo(1);
 		example.setOrderByClause("seat ASC");
 		List<User> user = new ArrayList<>();
-		try {			
+		try {
 			user = userMapper.selectByExample(example);
 		} catch (Exception e) {
 			logger.error("查询所有待抢座学生异常",e);

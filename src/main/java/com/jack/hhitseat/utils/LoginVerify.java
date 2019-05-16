@@ -9,11 +9,15 @@
  */
 package com.jack.hhitseat.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+
+import com.jack.hhitseat.task.MyRunnable;
 
 /**
  * class name: LoginVerify <BR>
@@ -22,6 +26,8 @@ import org.springframework.web.client.RestTemplate;
  * @author Aisino)weihaohao
  */
 public class LoginVerify {
+	
+	private static final Logger logger = LoggerFactory.getLogger(LoginVerify.class);
 	
 	static String body = null;
 	static String VIEWSTATE = "/wEPDwUJNjU0ODExMzM0ZGQfKz+nYo4XQMFAENFjh2BOCkXk0fYoklhR6Vtc9kqiLg==";
@@ -36,9 +42,9 @@ public class LoginVerify {
 		HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(null,headers);
 		ResponseEntity<String> response2 = template.postForEntity(url, httpEntity, String.class);
 		
-		String body = response2.getBody();
+		logger.warn("获取登录页面Body");
 
-		return body;
+		return response2.getBody();
 	}
 	
 	public static String getVIEWSTATE() {
