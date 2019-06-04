@@ -9,20 +9,25 @@
  */
 package com.jack.hhitseat.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jack.hhitseat.bean.Log;
+import com.jack.hhitseat.bean.LogExample;
 import com.jack.hhitseat.mapper.LogMapper;
 import com.jack.hhitseat.service.ILogService;
+import com.jack.hhitseat.utils.MyUtils;
 
 /**
  * class name: LogServiceImpl <BR>
  * class description: please write your description <BR>
  * @version 1.0  2019年3月29日 下午1:01:05
- * @author Aisino)weihaohao
+ * @author Aisino)chenwei
  */
 @Service("logServiceImpl")
 public class LogServiceImpl implements ILogService {
@@ -47,6 +52,18 @@ public class LogServiceImpl implements ILogService {
 		} catch (Exception e) {
 			logger.error("添加日志出错", e);
 		}
+	}
+
+	public long getSuccessNumb() {
+		List<Log> logs = new ArrayList<>();
+		LogExample example = new LogExample();
+		example.createCriteria().andCreateTimeBetween(MyUtils.getNowDateYMD(), MyUtils.getNextDate());
+		try {
+			logs = logMapper.selectByExample(example);
+		} catch (Exception e) {
+			logger.error("查询日志出错", e);
+		}
+		return logs.size();
 	}
 
 }

@@ -77,7 +77,7 @@ public class MyUtils {
 		return dateTime;
 	}
 	
-/**
+	/**
 	 * Method name: getNowDateYMD <BR>
 	 * Description: 返回当前日期和时间 yyyy-MM-dd <BR>
 	 * Remark: <BR>
@@ -309,13 +309,24 @@ public class MyUtils {
 		return hostAddress;
 	}
 	
+	/**
+	 * Method name: getNextDate <BR>
+	 * Description: 返回当前日期的下一天 yyyy-MM-dd <BR>
+	 * Remark: <BR>
+	 * @return  String<BR>
+	 */
 	public static String getNextDate() {
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.DAY_OF_MONTH, 1);
 		return sf.format(c.getTime());
 	}
-	
+	/**
+	 * Method name: String2Date <BR>
+	 * Description: 将字符串日期转换成日期类型  yyyy-MM-dd <BR>
+	 * Remark: <BR>
+	 * @return  Date<BR>
+	 */
 	public static Date String2Date(String date) {
 		Date d = new Date();
 		try {

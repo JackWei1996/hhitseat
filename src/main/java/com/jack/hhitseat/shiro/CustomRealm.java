@@ -28,7 +28,7 @@ import java.util.Set;
  * class name: CustomRealm <BR>
  * class description: 自定义 Realm <BR>
  * @version 1.00 2019年1月16日
- * @author Aisino)weihaohao
+ * @author Aisino)chenwei
  */
 @Component
 public class CustomRealm extends AuthorizingRealm {

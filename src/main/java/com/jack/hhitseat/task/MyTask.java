@@ -25,6 +25,7 @@ import org.springframework.util.MultiValueMap;
 
 import com.jack.hhitseat.bean.User;
 import com.jack.hhitseat.service.HttpClient;
+import com.jack.hhitseat.service.impl.LogServiceImpl;
 import com.jack.hhitseat.service.impl.UserServiceImpl;
 import com.jack.hhitseat.utils.LoginVerify;
 
@@ -41,15 +42,26 @@ public class MyTask {
 	HttpClient httpClient;
 	@Autowired
 	private UserServiceImpl userService;
+	@Autowired
+	private LogServiceImpl logService;
+	
 	private final Logger logger = LoggerFactory.getLogger(MyTask.class);
 	
 	private static Map<String, String> sessionMap = new HashMap<>();
 	private static String VIEWSTATE = null;
 	private static String EVENTVALIDATION = null;
 	//线程池--设置线程数
-	private static ExecutorService executorService = Executors.newFixedThreadPool(10);
+	private static ExecutorService executorService = Executors.newFixedThreadPool(25);
 	
 	private static List<User> users = new ArrayList<>();
+	
+	//定时登录
+	@Scheduled(cron = "0 20 5 * * ?") 
+    public void dl2() {
+    	logger.warn("++++++启动登录");
+    	init();
+    	logger.warn("++++++结束登录");
+    }
 	
 	//添加定时任务
     @Scheduled(cron = "0 30 5 * * ? ")
@@ -63,13 +75,14 @@ public class MyTask {
 			executorService.execute(new MyRunnable(u, sessionMap));
 		}
 	}
-
-    @Scheduled(cron = "0 20 5 * * ?") 
-    public void dl2() {
-    	logger.warn("++++++启动登录");
-    	init();
-    	logger.warn("++++++结束登录");
-    }
+    
+   //查看抢到座的人数
+   @Scheduled(cron = "0 50 5 * * ? ")
+   public void getResult() {
+	   logger.warn("------结束抢座");
+	   long count = logService.getSuccessNumb();
+	   logger.warn("本次抢座成功人数==={}", count);
+   }
     
     public void init() {
     	sessionMap.clear();
@@ -91,7 +104,7 @@ public class MyTask {
 				user.setIsdo(0);
 				userService.updateUser(user);
 			}
-			logger.warn("{}===Session==={}", user.getUserName(), s);
+			logger.warn("{}==={}", user.getUserName(), s);
     	}
     }
     

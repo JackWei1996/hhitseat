@@ -28,7 +28,7 @@ import com.jack.hhitseat.utils.MyUtils;
  * class name: MyRunnable <BR>
  * class description: please write your description <BR>
  * @version 1.0  2019年4月1日 上午8:57:03
- * @author Aisino)weihaohao
+ * @author Aisino)chenwei
  */
 //为了线程安全，不能依赖注入！！！
 public class MyRunnable extends Thread {

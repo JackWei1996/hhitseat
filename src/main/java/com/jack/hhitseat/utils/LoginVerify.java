@@ -23,7 +23,7 @@ import com.jack.hhitseat.task.MyRunnable;
  * class name: LoginVerify <BR>
  * class description: please write your description <BR>
  * @version 1.0  2019年3月27日 下午4:39:10
- * @author Aisino)weihaohao
+ * @author Aisino)chenwei
  */
 public class LoginVerify {
 	
@@ -51,9 +51,12 @@ public class LoginVerify {
 		if(body==null) {			
 			body = getBody();
 		}
-		if(body!=null) {			
-			return body.split("id=\"__VIEWSTATE\" value=\"")[1].split("\" />")[0];
+		if(body!=null) {
+			String itm = body;
+			body = null;
+			return itm.split("id=\"__VIEWSTATE\" value=\"")[1].split("\" />")[0];
 		}
+		body = null;
 		return VIEWSTATE;
 	}
 	
@@ -61,9 +64,12 @@ public class LoginVerify {
 		if(body==null) {			
 			body = getBody();
 		}
-		if(body!=null) {			
-			return body.split("id=\"__EVENTVALIDATION\" value=\"")[1].split("\" />")[0];
+		if(body!=null) {	
+			String itm = body;
+			body = null;
+			return itm.split("id=\"__EVENTVALIDATION\" value=\"")[1].split("\" />")[0];
 		}
+		body = null;
 		return EVENTVALIDATION;
 	}
 }

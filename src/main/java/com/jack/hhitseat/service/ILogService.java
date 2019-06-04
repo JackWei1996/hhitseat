@@ -15,7 +15,7 @@ import com.jack.hhitseat.bean.Log;
  * class name: ILogService <BR>
  * class description: please write your description <BR>
  * @version 1.0  2019年3月29日 下午12:58:47
- * @author Aisino)weihaohao
+ * @author Aisino)chenwei
  */
 public interface ILogService {
 	public void addLog(Log log);

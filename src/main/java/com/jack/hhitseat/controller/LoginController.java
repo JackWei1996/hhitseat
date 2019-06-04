@@ -37,7 +37,7 @@ import com.jack.hhitseat.utils.MyUtils;
  * class description: 登录操作 <BR>
  * Remark: <BR>
  * @version 1.00 2019年1月16日
- * @author Aisino)weihaohao
+ * @author Aisino)chenwei
  */
 @Controller
 public class LoginController {

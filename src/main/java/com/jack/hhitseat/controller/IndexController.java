@@ -30,7 +30,7 @@ import com.jack.hhitseat.utils.MyUtils;
  * class name: IndexController <BR>
  * class description: please write your description <BR>
  * @version 1.0  2019年3月27日 上午10:28:50
- * @author Aisino)weihaohao
+ * @author Aisino)chenwei
  */
 @Controller
 public class IndexController {
