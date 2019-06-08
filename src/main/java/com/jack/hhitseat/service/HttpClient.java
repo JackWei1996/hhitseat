@@ -3,7 +3,6 @@
  */
 package com.jack.hhitseat.service;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.http.HttpEntity;
@@ -11,7 +10,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
@@ -37,17 +35,21 @@ public class HttpClient {
 		HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(params,headers);
 		ResponseEntity<String> response2 = template.postForEntity(url, httpEntity, String.class);
 		
-		String body = response2.getBody();
-		
-	//System.out.println(body);
+		//String body = response2.getBody();
+	//	String ht = response2.getHeaders().toString();
+	//System.out.println("头文件："+ht);
+	//System.out.println("身体："+body);
 		
 		String session ="LOGIN_ERR";//登录错误
-		String result = body.split("<span id=\"MSG\">")[1].split("</span></div></td></tr>")[0];
+		//String result = body.split("<span id=\"MSG\">")[1].split("</span></div></td></tr>")[0];
 		//System.out.println(result);
-		if(result.contains("无管理权限")) {			
-			session =response2.getHeaders().toString().split("ASP.NET_SessionId=")[1].split("; path=/; ")[0];
+		//if(result.contains("无管理权限")) {			
+		session =response2.getHeaders().toString().split("ASP.NET_SessionId=")[1].split("; path=/; ")[0];
+		if(session==null || session.length()<5) {
+			session ="LOGIN_ERR";
 		}
-
+		//}
+//System.out.println(session);
 		return session;
 	}
 	

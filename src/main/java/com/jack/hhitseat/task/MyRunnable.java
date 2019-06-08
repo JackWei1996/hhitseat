@@ -38,6 +38,11 @@ public class MyRunnable extends Thread {
 	private Map<String, String> sessionMap = new HashMap<>();
 	private User u;
 	
+	private static  String url2 = "http://seat.hhit.edu.cn/ClientWeb/pro/ajax/reserve.aspx?" +
+			"&dev_id={dev_id}" + "&type={type}" + "&start={start}" + "&end={end}" +
+			"&start_time={start_time}" + "&end_time={end_time}" + "&act={act}" +
+			"&_={_}"; 
+	
 	public MyRunnable() {
 	}
 	
@@ -95,11 +100,7 @@ public class MyRunnable extends Thread {
 		  cal.setTime(d);
 		  int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
 
-		String r = "";
-		String url2 = "http://seat.hhit.edu.cn/ClientWeb/pro/ajax/reserve.aspx?" +
-				"&dev_id={dev_id}" + "&type={type}" + "&start={start}" + "&end={end}" +
-				"&start_time={start_time}" + "&end_time={end_time}" + "&act={act}" +
-				"&_={_}"; 
+		  String r = "";
 
 		if(w==3) {
 			String sjc = System.currentTimeMillis()+"";
