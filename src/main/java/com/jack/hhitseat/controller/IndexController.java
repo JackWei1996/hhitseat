@@ -30,7 +30,7 @@ import com.jack.hhitseat.utils.MyUtils;
  * class name: IndexController <BR>
  * class description: please write your description <BR>
  * @version 1.0  2019年3月27日 上午10:28:50
- * @author Aisino)chenwei
+ * @author Aisino)JackWei
  */
 @Controller
 public class IndexController {
@@ -61,7 +61,6 @@ public class IndexController {
 			return resultMap.fail().message("用户邮箱地址有问题！");
 		}
 		
-		
 		if(VIEWSTATE==null || EVENTVALIDATION==null) {
 			  VIEWSTATE = LoginVerify.getVIEWSTATE();
 			  EVENTVALIDATION = LoginVerify.getEVENTVALIDATION();
@@ -84,7 +83,6 @@ public class IndexController {
 		}
 			
 		List<User> users = userService.getUserByNum(u);
-		
 
 		if(users.size()>0) {
 			return resultMap.fail().message("该学号已经被注册！");
@@ -95,6 +93,10 @@ public class IndexController {
 		  String html = httpClient.login(loginUrl, SESSION);
 		  
 		  String name = html.split("acc.name = \"")[1].split("\";")[0];
+		  
+		  if(name==null || name.equals("")) {
+				return resultMap.fail().message("用户名密码错误！");
+		  }
 		  
 		  User user = new User();
 		  
