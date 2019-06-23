@@ -42,8 +42,8 @@ public class HttpClient {
 		
 		String body = response2.getBody();
 	String ht = response2.getHeaders().toString();
-	System.out.println("头文件："+ht);
-	System.out.println("身体："+body);
+	//System.out.println("头文件："+ht);
+	//System.out.println("身体："+body);
 		
 		String session ="LOGIN_ERR";//登录错误
 		String result = null;
@@ -51,14 +51,14 @@ public class HttpClient {
 			result = body.split("<span id=\"MSG\">")[1].split("</span></div></td></tr>")[0];
 			if(result.contains("无管理权限")) {			
 				session =response2.getHeaders().toString().split("ASP.NET_SessionId=")[1].split("; path=/; ")[0];
-				System.out.println("--+++++----"+result);
+				//System.out.println("--+++++----"+result);
 			}
 		}catch (Exception e) {
 			session =response2.getHeaders().toString().split("ASP.NET_SessionId=")[1].split("; path=/; ")[0];
-			System.out.println("----------"+result);
+			//System.out.println("----------"+result);
 		}
 		
-System.out.println("Session======"+session);
+//System.out.println("Session======"+session);
 		return session;
 	}
 	

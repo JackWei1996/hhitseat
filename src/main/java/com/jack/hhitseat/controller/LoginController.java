@@ -243,8 +243,8 @@ public class LoginController {
      */
     @RequestMapping(value = "/login")
     public String login(String username, String password) {
-    	System.out.println(username);
-    	System.out.println(password);
+    	//System.out.println(username);
+    	//System.out.println(password);
     	return "gr";
     }
 }

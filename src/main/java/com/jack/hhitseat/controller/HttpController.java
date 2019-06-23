@@ -38,7 +38,7 @@ public class HttpController {
 		
 		//String session = s.split("ASP.NET_SessionId=")[1].split("; path=/; ")[0];
 		
-		System.out.println(session);
+		//System.out.println(session);
 		
 		
 		//params.add("ASP.NET_SessionId", session);
@@ -48,7 +48,7 @@ public class HttpController {
 		String loginUrl = "http://seat.hhit.edu.cn/ClientWeb/xcus/ic2/Default.aspx";
 		
 		String s = httpClient.login(loginUrl, session);
-		System.out.println(s);
+		//System.out.println(s);
 		return s;
 	}
 }
