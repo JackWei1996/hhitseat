@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8">
-  <title>用户注册信息</title>
+  <title>用户注册</title>
   <script type="text/javascript" th:src="@{/js/jquery/jquery-3.3.1.js}" src="js/jquery/jquery-3.3.1.js" ></script>
   <script type="text/javascript" th:src="@{/js/zw.js}" src="js/zw.js" ></script>
 <link th:href="@{/css/login.css}" href="css/login.css" rel="stylesheet" type="text/css" media="all"/>
@@ -23,7 +23,7 @@ input::-webkit-input-placeholder {
 <body onkeydown="key_down(event.keyCode);">
 <div class="sky" style="position:absolute; width:100%; top:0px;height:100%;opacity:0.75;"></div>
 <div class="login-form" style="position:relative;">
-		<h1><a  href='http://seat.hhit.edu.cn' target='view_window' style='color:#FFF'>淮海工学院图书馆抢座系统V2.0</a></h1>
+		<h1><a  href='http://seat.hhit.edu.cn' target='view_window' style='color:#FFF'>江苏海洋大学图书馆抢座系统V2.5</a></h1>
 		<a href="/jz">
 			<div class="div-a">点我捐助服务器</div>   
 		</a>
@@ -91,7 +91,7 @@ layui.use(['form', 'layedit', 'laydate'], function(){
     elem: '#test1' //指定元素
   });
 
-  	 //自定义验证规则  
+  //自定义验证规则  
   form.verify({  
        phone: [/^1[3|4|5|7|8]\d{9}$/, '手机必须11位，只能是数字！']  
         ,email: [/^[a-z0-9._%-]+@([a-z0-9-]+\.)+[a-z]{2,4}$|^1[3|4|5|7|8]\d{9}$/, '邮箱格式不对']  
@@ -148,13 +148,20 @@ function tijiao(){
 			}); 
 		}
 	}
+	$("#login1").attr("disabled","disabled"); 
+	$("#login1").css({'background-color':'#708090'});
+	//$("#login1").attr("disabled",ture);
 }
 
 $(function(){
-
 	var zw = getZW();
 	$("#zw1").html(zw);
 	$("#zw2").html(zw);
 	$("#zw3").html(zw);
+	
+	$('body').on('input propertychange', '.login-ic', function(event) {
+        $("#login1").removeAttr("disabled");
+    	$("#login1").css({'background-color':'red'});
+    });
 });
 </script>

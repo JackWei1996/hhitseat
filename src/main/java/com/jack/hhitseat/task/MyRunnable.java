@@ -125,9 +125,11 @@ public class MyRunnable extends Thread {
 			qzParparamMap2.put("dev_id", seat); 
 			qzParparamMap2.put("type","dev");
 			qzParparamMap2.put("start",yyrq+"+17:30");
-			qzParparamMap2.put("end",yyrq+"+22:00");
+			//qzParparamMap2.put("end",yyrq+"+22:00");
+			qzParparamMap2.put("end",yyrq+"+21:00");//暑假时间
 			qzParparamMap2.put("start_time","1730"); 
-			qzParparamMap2.put("end_time","2200");
+			//qzParparamMap2.put("end_time","2200");
+			qzParparamMap2.put("end_time","2100");		//暑假时间
 			qzParparamMap2.put("act","set_resv"); 
 			qzParparamMap2.put("_",sjc);
 
@@ -140,9 +142,11 @@ public class MyRunnable extends Thread {
 			qzParparamMap.put("dev_id", seat); 
 			qzParparamMap.put("type","dev");
 			qzParparamMap.put("start",yyrq+"+08:00");
-			qzParparamMap.put("end",yyrq+"+22:00");
+			//qzParparamMap.put("end",yyrq+"+22:00");
+			qzParparamMap.put("end",yyrq+"+21:00");//暑假时间
 			qzParparamMap.put("start_time","800"); 
-			qzParparamMap.put("end_time","2200");
+			//qzParparamMap.put("end_time","2200");
+			qzParparamMap.put("end_time","2100");		//暑假时间
 			qzParparamMap.put("act","set_resv");
 			qzParparamMap.put("_",sjc);
 			

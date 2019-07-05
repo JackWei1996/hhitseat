@@ -13,7 +13,7 @@
 	<version>2.5</version>
 	<packaging>jar</packaging>
 	<name>hhitseat</name>
-	<description>淮海工学院图书馆在线自动预约系统---jack魏</description>
+	<description>江苏海洋大学图书馆在线自动预约系统---jack魏</description>
 
 	<properties>
 		<java.version>1.8</java.version>

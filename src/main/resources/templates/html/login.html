@@ -15,6 +15,8 @@
 input::-webkit-input-placeholder {
 	color:#fff;
 }
+.div-a{ position:fixed; left:10px; top:20px; background:#00F;padding: 10px;color: #FFF;z-index: 999}  
+.div-b{ position:fixed; right:10px; top:20px; background:#F00;padding: 10px;color: #FFF;z-index: 999}  
 </style>
 
 <script type="text/javascript" th:inline="javascript">
@@ -95,7 +97,13 @@ function key_down(num){
 		<div class="login" >
 			<span ><img src="imgs/hhit/hhit.png" alt="hhit"  style="position: relative; left: 44%; top:-15px; width: 150px; height: 150px;"/></span>
 		</div>
-		<h1>淮海工学院图书馆抢座系统2.0</h1>
+		<h1>欢迎使用江苏海洋大学图书馆抢座系统</h1>
+		<a href="/index">
+			<div class="div-a">点我进入2.5版本</div>
+		</a> 
+		<a href="/jz">
+			<div class="div-b">点我捐助服务器</div>   
+		</a>
 		<div class="login-top">
 		<form>
 			<div class="login-ic">
