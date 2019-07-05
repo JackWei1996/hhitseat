@@ -76,5 +76,20 @@ public class UserServiceImpl implements UserService {
 			logger.error("更新用户异常",e);
 		}
 	}
+
+	@Override
+	public int updateIsDo(String num, Integer flag) {
+		UserExample example = new UserExample();
+		example.createCriteria().andStuNumEqualTo(num);
+		User user = new User();
+		user.setIsdo(flag);
+		try {			
+			userMapper.updateByExampleSelective(user, example);
+		} catch (Exception e) {
+			logger.error("更新用户异常",e);
+			return -1;
+		}
+		return 1;
+	}
 	
 }

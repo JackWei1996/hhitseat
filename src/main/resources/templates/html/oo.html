@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8">
-  <title>用户注册</title>
+  <title>开启或关闭预约服务</title>
   <script type="text/javascript" th:src="@{/js/jquery/jquery-3.3.1.js}" src="js/jquery/jquery-3.3.1.js" ></script>
   <script type="text/javascript" th:src="@{/js/zw.js}" src="js/zw.js" ></script>
 <link th:href="@{/css/login.css}" href="css/login.css" rel="stylesheet" type="text/css" media="all"/>
@@ -14,16 +14,45 @@
 input::-webkit-input-placeholder {
 	color:#fff;
 }
+#login2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    padding: 13px 0;
+    background: #ffd400;
+    display: inline-block;
+    width: 50%;
+	outline:none;
+	border:2px  #FFF;
+	cursor:pointer;
+	text-transform:uppercase;
+}
+#login1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    padding: 13px 0;
+    background: #ff3366;
+    display: inline-block;
+    width: 50%;
+	outline:none;
+	border:2px  #FFF;
+	cursor:pointer;
+	text-transform:uppercase;
+}
 .div-a{ position:fixed; left:20px; top:20px; background:#F00;padding: 10px;color: #FFF;z-index: 999}  
 .div-b{ position:fixed; right:20px; top:20px; background:#F00;padding: 10px;color: #FFF;z-index: 999} 
 </style>
 <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
 
 </head>
-<body onkeydown="key_down(event.keyCode);">
+<body>
 <div class="sky" style="position:absolute; width:100%; top:0px;height:100%;opacity:0.75;"></div>
 <div class="login-form" style="position:relative;">
-		<h1><a  href='http://seat.hhit.edu.cn' target='view_window' style='color:#FFF'>江苏海洋大学图书馆抢座系统V2.5</a></h1>
+		<div class="login" >
+			<span ><img src="imgs/hhit/hhit.png" alt="hhit"  style="position: relative; left: 44%; top:-15px; width: 150px; height: 150px;"/></span>
+		</div>
+		<h1><a  href='http://seat.hhit.edu.cn' target='view_window' style='color:#FFF'>江苏海洋大学图书馆预约抢座系统V2.5</a></h1>
 		<a href="/jz">
 			<div class="div-a">点我捐助服务器</div>   
 		</a>
@@ -47,26 +76,8 @@ input::-webkit-input-placeholder {
 				<input type="text"  placeholder="常用邮箱" lay-verify="email" id="e" name="e"  />
 				<div class="clear"> </div>
 			</div>
-			<div class="login-ic">
-				<i class="layui-icon layui-icon-table" style="font-size: 30px; color: #FFF;"></i>
-			      <select lay-verify="required" id = "zw1" style="width: 400px;height: 38px; margin-left: 4px;color: #000;opacity:0.7;">
-			      </select>
-				<div class="clear"> </div>
-			</div>
-			<div class="login-ic">
-				<i class="layui-icon layui-icon-table" style="font-size: 30px; color: #FFF;"></i>
-			      <select lay-verify="required" id = "zw2" style="width: 400px;height: 38px; margin-left: 4px;color: #000;opacity:0.7;">
-			      </select>
-				<div class="clear"> </div>
-			</div>
-			<div class="login-ic">
-				<i class="layui-icon layui-icon-table" style="font-size: 30px; color: #FFF;"></i>
-			      <select lay-verify="required" id = "zw3" style="width: 400px;height: 38px; margin-left: 4px;color: #000;opacity:0.7;">
-			      </select>
-				<div class="clear"> </div>
-			</div>
 			<div class="log-bwn">
-				<input type="button"  id="login1" value="提交注册信息" onclick="tijiao()">
+				<input type="button"  id="login2" value="开启预约" onclick="toON(1)"><input type="button"  id="login1" value="关闭预约" onclick="toON(0)">
 			</div>
 		</form>
 	</div>
@@ -76,13 +87,6 @@ input::-webkit-input-placeholder {
 
 
 <script>
-
-function key_down(num){
-	if(num == 13) {
-		tijiao();
-	}
-}
-
 layui.use(['form', 'layedit', 'laydate'], function(){
   var laydate = layui.laydate;
   var form = layui.form;
@@ -96,42 +100,31 @@ layui.use(['form', 'layedit', 'laydate'], function(){
        phone: [/^1[3|4|5|7|8]\d{9}$/, '手机必须11位，只能是数字！']  
         ,email: [/^[a-z0-9._%-]+@([a-z0-9-]+\.)+[a-z]{2,4}$|^1[3|4|5|7|8]\d{9}$/, '邮箱格式不对']  
   });  
-  
 });
 
 
-function tijiao(){
+function toON(flag){
 	var u = $("#u").val();
 	var p = $("#p").val();
 	var em = $("#e").val();
-	var zw1 = $('#zw1 option:selected').val()+"="+$('#zw1 option:selected').html();
-	var zw2 = $('#zw2 option:selected').val()+"="+$('#zw2 option:selected').html();
-	var zw3 = $('#zw3 option:selected').val()+"="+$('#zw3 option:selected').html();
-	
-	if(em&&u&&p&&zw1!="-1=-----请选择座位-----"){
-		var ip = returnCitySN['cip'];
-		var cname = returnCitySN['cname'];
+
+	if(em&&u&&p&&flag==0||flag==1){
 		$.ajax({
 			type:"POST",
 			async:true,  //默认true,异步
-			data:{"ip":ip,"cname":cname,"u":u,"p":p,"zw1":zw1,"zw2":zw2,"zw3":zw3, "em":em},
+			data:{"u":u,"p":p,"em":em,"f":flag},
 			dataType:'json',
 			timeout:20000,
-			url:"/reg",
+			url:"/toOn",
 			success:function(data){
 				layer.alert(data.message, {icon: data.result=="success"?1:2});
 		    },
-		    error:function() {
+		    error:function(data) {
 		    	layer.alert('服务器错误,请联系开发人员！', {icon: 2});
 		    }
 		});
 	}else{
-		if(zw1=="-1=-----请选择座位-----"){
-			layer.open({
-				  title: '错误提示'
-				  ,content: '第一个座位为必选项！'
-			}); 
-		}else if(!u){
+		if(!u){
 			layer.open({
 				  title: '错误提示'
 				  ,content: '请输入登录学号'
@@ -146,22 +139,25 @@ function tijiao(){
 				  title: '错误提示'
 				  ,content: '请输入邮箱地址'
 			}); 
+		}else if(!flag){
+			layer.open({
+				  title: '错误提示'
+				  ,content: '预约方式不正确'
+			}); 
 		}
 	}
 	$("#login1").attr("disabled","disabled"); 
 	$("#login1").css({'background-color':'#708090'});
-	//$("#login1").attr("disabled",ture);
+	$("#login2").attr("disabled","disabled"); 
+	$("#login2").css({'background-color':'#888'});
 }
 
 $(function(){
-	var zw = getZW();
-	$("#zw1").html(zw);
-	$("#zw2").html(zw);
-	$("#zw3").html(zw);
-	
 	$('body').on('input propertychange', '.login-ic', function(event) {
         $("#login1").removeAttr("disabled");
-    	$("#login1").css({'background-color':'red'});
+    	$("#login1").css({'background-color':'#ff3366'});
+    	$("#login2").removeAttr("disabled");
+    	$("#login2").css({'background-color':'#ffd400'});
     });
 });
 </script>

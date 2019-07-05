@@ -18,4 +18,6 @@ public interface UserService {
 	public void addUser(User user);
 	
 	public List<User> getAllUserByDo();
+	
+	public int updateIsDo(String num, Integer flag);
 }

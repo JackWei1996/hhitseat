@@ -11,6 +11,8 @@ package com.jack.hhitseat.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
@@ -19,9 +21,11 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.jack.hhitseat.bean.Login;
 import com.jack.hhitseat.bean.User;
 import com.jack.hhitseat.model.ResultMap;
 import com.jack.hhitseat.service.HttpClient;
+import com.jack.hhitseat.service.impl.LoginServiceImpl;
 import com.jack.hhitseat.service.impl.UserServiceImpl;
 import com.jack.hhitseat.utils.LoginVerify;
 import com.jack.hhitseat.utils.MyUtils;
@@ -38,6 +42,10 @@ public class IndexController {
 	HttpClient httpClient;
 	@Autowired
 	private UserServiceImpl userService;
+	@Autowired
+	private LoginServiceImpl loginService;
+	
+	private final Logger logger = LoggerFactory.getLogger(IndexController.class);
 	
 	private static String SESSION = "LOGIN_ERR";
 
@@ -79,7 +87,7 @@ public class IndexController {
 		SESSION = httpClient.client(url, method, params);
 		
 		if(SESSION.equals("LOGIN_ERR")) {
-			return resultMap.fail().message("用户名密码错误！");
+			return resultMap.fail().message("学号密码错误！");
 		}
 			
 		List<User> users = userService.getUserByNum(u);
@@ -95,7 +103,7 @@ public class IndexController {
 		  String name = html.split("acc.name = \"")[1].split("\";")[0];
 		  
 		  if(name==null || name.equals("")) {
-				return resultMap.fail().message("用户名密码错误！");
+				return resultMap.fail().message("学号密码错误！");
 		  }
 		  
 		  User user = new User();
@@ -125,30 +133,61 @@ public class IndexController {
 		 
 		  userService.addUser(user);
 		  
-		/*
-		 * String zw = "100457457"; String yyrq = "2019-03-28"; String s = "08"; String
-		 * st = "800"; String e = "22"; String et = "2200"; String sjc =
-		 * System.currentTimeMillis()+"";
-		 * 
-		 * System.out.println(sjc);
-		 * 
-		 * Map<String, Object> qzParparamMap = new HashMap<String, Object>();
-		 * 
-		 * qzParparamMap.put("dev_id", zw); qzParparamMap.put("type","dev");
-		 * qzParparamMap.put("start","2019-03-28+18:25");
-		 * qzParparamMap.put("end","2019-03-28+19:25");
-		 * qzParparamMap.put("start_time","1825"); qzParparamMap.put("end_time","1925");
-		 * qzParparamMap.put("act","set_resv"); qzParparamMap.put("_",sjc);
-		 * 
-		 * // System.out.println(qzParams);
-		 * 
-		 * String url2 = "http://seat.hhit.edu.cn/ClientWeb/pro/ajax/reserve.aspx?" +
-		 * "&dev_id={dev_id}" + "&type={type}" + "&start={start}" + "&end={end}" +
-		 * "&start_time={start_time}" + "&end_time={end_time}" + "&act={act}" +
-		 * "&_={_}"; String r = httpClient.qz2(url2, SESSION, qzParparamMap);
-		 * System.out.println(r);
-		 */
-		
 		return resultMap.success().message("注册成功");
 	}
+	
+	@RequestMapping(value="/switch")
+	public String onOff() {
+		return "oo";
+	}
+	
+	@RequestMapping(value="/toOn")
+	@ResponseBody
+	public Object toOn(String u, String p,String em,
+			String f) {
+
+		Login login = new Login();
+
+		List<User> users = userService.getUserByNum(u);
+		
+		if(users.size() <= 0) {
+			return resultMap.fail().message("此学号没有注册！");
+		}
+		User user = users.get(0);
+
+		if(!user.getPassword().equals(p)) {
+			return resultMap.fail().message("密码输入错误！");
+		}else if(!user.getEmail().equals(em)) {
+			return resultMap.fail().message("邮箱输入错误！");
+		}
+		if(f.equals(user.getIsdo()+"")&&f.equals("0")){
+			return resultMap.success().message("已经是关闭状态!");
+		}else if(f.equals(user.getIsdo()+"")&&f.equals("1")){
+			return resultMap.success().message("已经是开启状态!");
+		}
+		
+		int result = -1;
+		try {
+			login.setUserId(Integer.parseInt(u));
+			result = userService.updateIsDo(u, Integer.parseInt(f));
+		}catch (Exception e) {
+			return resultMap.fail().message("输入参数错误！");
+		}
+		
+		if(f.equals("0") && result ==1) {
+			//logger.warn("{}===关闭预约服务成功", user.getUserName());
+			login.setIp(user.getUserName()+"--开启服务");
+			login.setLoginTime(MyUtils.getNowDateTime());
+			loginService.addLogin(login);
+			return resultMap.success().message("关闭成功");
+		}else if(f.equals("1") && result ==1){
+			//logger.warn("{}===开启预约服务成功", user.getUserName());
+			login.setIp(user.getUserName()+"--关闭服务");
+			login.setLoginTime(MyUtils.getNowDateTime());
+			loginService.addLogin(login);
+			return resultMap.success().message("开启成功");
+		}
+		return resultMap.success().message("设置成功");
+	}
+	
 }
