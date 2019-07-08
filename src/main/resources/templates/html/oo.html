@@ -52,7 +52,7 @@ input::-webkit-input-placeholder {
 		<div class="login" >
 			<span ><img src="imgs/hhit/hhit.png" alt="hhit"  style="position: relative; left: 44%; top:-15px; width: 150px; height: 150px;"/></span>
 		</div>
-		<h1><a  href='http://seat.hhit.edu.cn' target='view_window' style='color:#FFF'>江苏海洋大学图书馆预约抢座系统V2.5</a></h1>
+		<h1><a  href='http://www.jack1996.com:8081/index' target='view_window' style='color:#FFF'>江苏海洋大学图书馆预约抢座系统V2.5</a></h1>
 		<a href="/jz">
 			<div class="div-a">点我捐助服务器</div>   
 		</a>
@@ -108,7 +108,7 @@ function toON(flag){
 	var p = $("#p").val();
 	var em = $("#e").val();
 
-	if(em&&u&&p&&flag==0||flag==1){
+	if(em&&u&&p&&(flag==0||flag==1)){
 		$.ajax({
 			type:"POST",
 			async:true,  //默认true,异步

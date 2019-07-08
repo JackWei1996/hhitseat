@@ -176,16 +176,16 @@ public class IndexController {
 		
 		if(f.equals("0") && result ==1) {
 			//logger.warn("{}===关闭预约服务成功", user.getUserName());
-			login.setIp(user.getUserName()+"--开启服务");
-			login.setLoginTime(MyUtils.getNowDateTime());
-			loginService.addLogin(login);
-			return resultMap.success().message("关闭成功");
-		}else if(f.equals("1") && result ==1){
-			//logger.warn("{}===开启预约服务成功", user.getUserName());
 			login.setIp(user.getUserName()+"--关闭服务");
 			login.setLoginTime(MyUtils.getNowDateTime());
 			loginService.addLogin(login);
-			return resultMap.success().message("开启成功");
+			return resultMap.success().message("关闭预约服务成功");
+		}else if(f.equals("1") && result ==1){
+			//logger.warn("{}===开启预约服务成功", user.getUserName());
+			login.setIp(user.getUserName()+"--开启服务");
+			login.setLoginTime(MyUtils.getNowDateTime());
+			loginService.addLogin(login);
+			return resultMap.success().message("开启预约服务成功");
 		}
 		return resultMap.success().message("设置成功");
 	}
