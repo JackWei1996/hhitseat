@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>关于“江苏海洋大学图书馆抢座系统”停止服务的通知</title>
+<link th:href="@{/css/login.css}" href="css/login.css" rel="stylesheet" type="text/css" media="all"/>
+<script type="text/javascript" th:src="@{/js/jquery/jquery-3.3.1.js}" src="js/jquery/jquery-3.3.1.js" ></script>
+<link rel="stylesheet" th:href="@{/css/cloudstyle.css}" href="css/cloudstyle.css"/>
+
+<!-- layer -->
+<link type="text/css" rel="stylesheet" th:href="@{/plug/layui/css/layui.css}"/>
+<script type="text/javascript" th:src="@{/plug/layui/layui.all.js}"  src="plug/layui/layui.all.js" ></script>
+<style>
+input::-webkit-input-placeholder {
+	color:#fff;
+}
+.div-a{ position:fixed; left:10px; top:20px; background:#00F;padding: 10px;color: #FFF;z-index: 999}  
+.div-b{ position:fixed; right:10px; top:20px; background:#F00;padding: 10px;color: #FFF;z-index: 999}  
+.div-c{ position:fixed; left:50px; top:60px; padding: 10px;color: #FFF;z-index: 999}  
+</style>
+
+</head>
+
+<body>
+<audio loop="loop" autoplay="autoplay">
+<source src="mp4/ykzzldx.mp3" type="audio/mpeg" />
+您的浏览器无法播放音乐！
+</audio>
+<div class="sky" style="position:absolute; width:100%; top:0px;height:110%;opacity:0.75;"></div>
+<div class="login-form" style="position:relative;">
+		<div class="login" style="height: 140px;">
+			<span ><img src="imgs/hhit/hhit.png" alt="hhit"  style="position: relative; left: 45%; top:-15px; width: 150px; height: 150px;"/></span>
+		</div>
+		<h1 style="margin-bottom:0.2em"><a  href='http://www.jack1996.com:8081/index' target='view_window' style='color:#FFF'>《关于“江苏海洋大学图书馆抢座系统”停止服务的通知》</a></h1>
+		<a href="/index">
+			<div class="div-a">点我进入2.5版本</div>
+		</a> 
+		<div class="div-c"></div>
+		<a href="/jz">
+			<div class="div-b">点我捐助服务器</div>   
+		</a>
+		<h1 style="margin-bottom:0.2em;color:#AE0000" id="djs">X天X时X分X秒 将关闭系统</h1>
+		<div class="login-top">
+<pre style="color:#000; font-weight:bold; text-align: center;">
+非常感谢大家近一年来的支持，
+本系统自2019年2月25日上线以来，
+从1.0测试版本到2.5正式公测版本，
+一路走来也很艰辛。
+在此期间陆陆续续就有不少朋友慕名而来，
+基本上都是考研的朋友，
+在这里我们很欢迎也很欣慰，
+能为江海大考研学子贡献自己一份力量。
+
+我们的初衷就是帮助真正有需要的考研人，
+为你们争取多一点的休息时间，
+让你们安心学习，认真复习。
+这一点我们做到了，
+解决了同学们预约不到座位的痛点。
+
+在此我们不得不提出“分手”，
+虽然我们也有些不舍，
+但是“天下无有不散之筵席，少不得有个分开日子。”
+正逢2020考研之际，
+我们能给的也是这短暂的冬夏，
+希望人生路上大家积极面对，
+不管前方路程坎坷与否，
+世间还有一丝温暖留在心中。
+
+再次感谢大家的支持和捐助！
+我们将于2019年12月25日圣诞节中午12点准时关闭！
+
+                                                                 <font style="color:yellow">2019年7月9日</font>
+                                                                <font style="color:yellow"> 江海大助研小分队</font>
+		</pre>
+		</div>
+</div>
+</body>
+</html>
+
+<script>
+var coloseTime = "2019-12-25 12:00:00";
+function getDjs(time){
+	var endTime= new Date(Date.parse(time.replace(/-/g, "/")));/*replace将时间字符串中所有的'-'替换成'/',parse将时间格式的字符串转换成毫秒*/
+    var nowTime = new Date();
+    var distance =endTime.getTime() - nowTime.getTime();/*getTime把一个date对象转换成毫秒*/
+
+    var day = 0;
+    var hour = 0;
+    var minute = 0;
+    var second = 0;
+
+    if(distance >= 0){
+        day = Math.floor(distance/1000/60/60/24);
+        hour = Math.floor(distance/1000/60/60%24);
+        minute = Math.floor(distance/1000/60%60);
+        second = Math.floor(distance/1000%60);
+    }else{
+        return "本系统已关闭";
+    }
+   
+   return day + "天" +  hour + "时" + minute + "分" + second + "秒后"+" 将关闭系统"
+}
+
+$(function(){
+	setInterval(function() {
+		$("#djs").html(getDjs(coloseTime));
+	}, 1000*1);
+});
+</script>

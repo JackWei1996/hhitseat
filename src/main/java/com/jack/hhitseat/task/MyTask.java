@@ -55,32 +55,37 @@ public class MyTask {
 	
 	private static List<User> users = new ArrayList<>();
 	
+	private long successCount = 0;
+	
 	//定时登录
 	@Scheduled(cron = "0 25 5 * * ?") 
-	//@Scheduled(cron = "0 25 6 * * ?") 		//暑期抢座时间。
+	@Scheduled(cron = "0 25 6 * * ?") 		//暑期抢座时间。
     public void dl2() {
     	logger.warn("++++++启动登录");
     	init();
     	logger.warn("++++++结束登录");
+    	successCount = logService.getSuccessNumb();
     }
 	
 	//添加定时任务
     @Scheduled(cron = "0 30 5 * * ? ")
-	//@Scheduled(cron = "0 30 6 * * ? ")		//暑期抢座时间。
+	@Scheduled(cron = "0 30 6 * * ? ")		//暑期抢座时间。
 	public void myTask() {
     	logger.warn("------启动抢座");
     	if(users.size()==0) {
     		init();
     	}
-		for (User u : users) {
-			//多线程抢座
-			executorService.execute(new MyRunnable(u, sessionMap));
-		}
+    	if(successCount <= 0) {
+    		for (User u : users) {
+    			//多线程抢座
+    			executorService.execute(new MyRunnable(u, sessionMap));
+    		}
+    	}
 	}
     
 	//查看抢到座的人数
 	@Scheduled(cron = "0 50 5 * * ? ")
-	//@Scheduled(cron = "0 50 6 * * ? ")		//暑期抢座时间。
+	@Scheduled(cron = "0 50 6 * * ? ")		//暑期抢座时间。
 	public void getResult() {
 		logger.warn("------结束抢座");
 		long count = logService.getSuccessNumb();

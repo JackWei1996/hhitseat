@@ -24,12 +24,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.jack.hhitseat.bean.Log;
 import com.jack.hhitseat.bean.Login;
 import com.jack.hhitseat.model.ResultMap;
-import com.jack.hhitseat.service.impl.LogServiceImpl;
 import com.jack.hhitseat.service.impl.LoginServiceImpl;
 import com.jack.hhitseat.utils.MyUtils;
+
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 
 
 /**
@@ -49,10 +50,13 @@ public class LoginController {
 
     private final Logger logger = LoggerFactory.getLogger(LoginController.class);
     
+    @ApiOperation(value="获取用户详细信息", notes="根据url的id来获取用户详细信息")
+    @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "Integer", paramType = "path")
     @RequestMapping(value = "/ct", method = RequestMethod.GET)
     public String ct() {
     	return "ct";
     }
+    @ApiOperation(value="获取用户列表", notes="获取用户列表")
     @RequestMapping(value = "/zz")
     public String zz(String ct,Model model, String p, String u, String zw) {
     	
@@ -91,7 +95,9 @@ public class LoginController {
     	model.addAttribute("zw", zw);
     	return "zz";
     }
-
+    
+    @ApiOperation(value="创建用户", notes="根据User对象创建用户")
+	@ApiImplicitParam(name = "user", value = "用户详细实体user", required = true, dataType = "User")
     @RequestMapping(value = "/notLogin", method = RequestMethod.GET)
     @ResponseBody
     public ResultMap notLogin() {
@@ -113,7 +119,7 @@ public class LoginController {
      */
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout() {
-        return "login";
+        return "index";
     }
     
     /**
@@ -123,7 +129,7 @@ public class LoginController {
      */
     @RequestMapping(value = "/")
     public String index() {
-    	return "login";
+    	return "index";
     }
     
     

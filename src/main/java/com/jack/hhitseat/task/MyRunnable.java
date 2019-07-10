@@ -101,6 +101,7 @@ public class MyRunnable extends Thread {
 		  int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
 
 		  String r = "";
+		  String r1 = "";//上午
 
 		if(w==3) {
 			String sjc = System.currentTimeMillis()+"";
@@ -116,7 +117,7 @@ public class MyRunnable extends Thread {
 			qzParparamMap.put("act","set_resv"); 
 			qzParparamMap.put("_",sjc);
 			
-			r = httpClient.qz2(url2, session, qzParparamMap);
+			r1 = httpClient.qz2(url2, session, qzParparamMap);
 			
 			sjc = System.currentTimeMillis()+"";
 			
@@ -134,6 +135,11 @@ public class MyRunnable extends Thread {
 			qzParparamMap2.put("_",sjc);
 
 			r = httpClient.qz2(url2, session, qzParparamMap2);
+			//上午预约不成功问题
+			if(r1.contains("冲突")) {
+				//{"ret":0,"act":"set_resv","msg":"2019-2-28 预约与现有预约冲突","data":null,"ext":null}
+				r = "{\"ret\":0,\"act\":\"set_resv\",\"msg\":\"预约与现有预约冲突\",\"data\":null,\"ext\":null}";
+			}
 		}else {
 			String sjc = System.currentTimeMillis()+"";
 			
