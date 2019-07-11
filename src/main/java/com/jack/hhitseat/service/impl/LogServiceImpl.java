@@ -66,4 +66,10 @@ public class LogServiceImpl implements ILogService {
 		return logs.size();
 	}
 
+	@Override
+	public Long getAllCount() {
+		LogExample example = new LogExample();
+		return logMapper.countByExample(example);
+	}
+
 }

@@ -19,4 +19,5 @@ import com.jack.hhitseat.bean.Log;
  */
 public interface ILogService {
 	public void addLog(Log log);
+	public Long getAllCount();
 }

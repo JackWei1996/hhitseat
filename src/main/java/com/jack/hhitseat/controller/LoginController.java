@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jack.hhitseat.bean.Login;
 import com.jack.hhitseat.model.ResultMap;
+import com.jack.hhitseat.service.impl.LogServiceImpl;
 import com.jack.hhitseat.service.impl.LoginServiceImpl;
 import com.jack.hhitseat.utils.MyUtils;
 
@@ -44,9 +45,10 @@ import io.swagger.annotations.ApiOperation;
 public class LoginController {
 	@Autowired
     private ResultMap resultMap;
-	
 	@Autowired
 	private LoginServiceImpl loginServiceImpl;
+	@Autowired
+	private LogServiceImpl logServiceImpl;
 
     private final Logger logger = LoggerFactory.getLogger(LoginController.class);
     
@@ -128,7 +130,9 @@ public class LoginController {
      * @return  String login.html<BR>
      */
     @RequestMapping(value = "/")
-    public String index() {
+    public String index(Model model) {
+    	Long c = logServiceImpl.getAllCount();
+    	model.addAttribute("c", c+2000);
     	return "index";
     }
     

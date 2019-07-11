@@ -17,7 +17,7 @@ input::-webkit-input-placeholder {
 }
 .div-a{ position:fixed; left:10px; top:20px; background:#00F;padding: 10px;color: #FFF;z-index: 999}  
 .div-b{ position:fixed; right:10px; top:20px; background:#F00;padding: 10px;color: #FFF;z-index: 999}  
-.div-c{ position:fixed; left:50px; top:60px; padding: 10px;color: #FFF;z-index: 999}  
+.div-c{ position:fixed; left:150px; top:60px; padding: 10px;color: #FFF;z-index: 999}  
 </style>
 
 </head>
@@ -27,7 +27,7 @@ input::-webkit-input-placeholder {
 <source src="mp4/ykzzldx.mp3" type="audio/mpeg" />
 您的浏览器无法播放音乐！
 </audio>
-<div class="sky" style="position:absolute; width:100%; top:0px;height:110%;opacity:0.75;"></div>
+<div class="sky" style="position:absolute; width:100%; top:0px;height:120%;opacity:0.75;"></div>
 <div class="login-form" style="position:relative;">
 		<div class="login" style="height: 140px;">
 			<span ><img src="imgs/hhit/hhit.png" alt="hhit"  style="position: relative; left: 45%; top:-15px; width: 150px; height: 150px;"/></span>
@@ -40,6 +40,7 @@ input::-webkit-input-placeholder {
 		<a href="/jz">
 			<div class="div-b">点我捐助服务器</div>   
 		</a>
+		<div class="div-c" ><h1 id="countNum" style="color: #AE00AE	">共累计抢座：XXXX次</h1></div>
 		<h1 style="margin-bottom:0.2em;color:#AE0000" id="djs">X天X时X分X秒 将关闭系统</h1>
 		<div class="login-top">
 <pre style="color:#000; font-weight:bold; text-align: center;">
@@ -78,7 +79,8 @@ input::-webkit-input-placeholder {
 </body>
 </html>
 
-<script>
+<script type="text/javascript"  th:inline="javascript">
+var countNum = [[${c}]];
 var coloseTime = "2019-12-25 12:00:00";
 function getDjs(time){
 	var endTime= new Date(Date.parse(time.replace(/-/g, "/")));/*replace将时间字符串中所有的'-'替换成'/',parse将时间格式的字符串转换成毫秒*/
@@ -103,8 +105,10 @@ function getDjs(time){
 }
 
 $(function(){
+	$("#countNum").html("共累计抢座："+ countNum +"次");
+	$("#djs").html(getDjs(coloseTime));
 	setInterval(function() {
 		$("#djs").html(getDjs(coloseTime));
-	}, 1000*1);
+	}, 999*1);
 });
 </script>
