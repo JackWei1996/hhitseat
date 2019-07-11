@@ -91,5 +91,11 @@ public class UserServiceImpl implements UserService {
 		}
 		return 1;
 	}
+
+	public Long getAllUserByDoCount() {
+		UserExample example = new UserExample();
+		example.createCriteria().andIsdoEqualTo(1);
+		return userMapper.countByExample(example);
+	}
 	
 }

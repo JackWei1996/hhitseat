@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +26,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jack.hhitseat.bean.Login;
+import com.jack.hhitseat.bean.User;
 import com.jack.hhitseat.model.ResultMap;
 import com.jack.hhitseat.service.impl.LogServiceImpl;
 import com.jack.hhitseat.service.impl.LoginServiceImpl;
+import com.jack.hhitseat.service.impl.UserServiceImpl;
 import com.jack.hhitseat.utils.MyUtils;
 
 import io.swagger.annotations.ApiImplicitParam;
@@ -49,6 +52,8 @@ public class LoginController {
 	private LoginServiceImpl loginServiceImpl;
 	@Autowired
 	private LogServiceImpl logServiceImpl;
+	@Autowired
+	private UserServiceImpl userService;
 
     private final Logger logger = LoggerFactory.getLogger(LoginController.class);
     
@@ -132,7 +137,9 @@ public class LoginController {
     @RequestMapping(value = "/")
     public String index(Model model) {
     	Long c = logServiceImpl.getAllCount();
+    	Long u = userService.getAllUserByDoCount();
     	model.addAttribute("c", c+2000);
+    	model.addAttribute("u", u);
     	return "index";
     }
     

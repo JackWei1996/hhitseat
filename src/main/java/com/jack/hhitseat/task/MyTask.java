@@ -92,9 +92,11 @@ public class MyTask {
 	@Scheduled(cron = "0 50 6 * * ? ")		//暑期抢座时间。
 	@Scheduled(cron = "0 50 8 * * ? ")
 	public void getResult() {
-		logger.warn("------结束抢座");
-		long count = logService.getSuccessNumb();
-		logger.warn("本次抢座成功人数==={}", count);
+		if(successCount <= 0) {
+			logger.warn("------结束抢座");
+			long count = logService.getSuccessNumb();
+			logger.warn("本次抢座成功人数==={}", count);
+		}
 	}
     
     public void init() {
