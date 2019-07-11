@@ -42,7 +42,7 @@ public class LoginVerify {
 		HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(null,headers);
 		ResponseEntity<String> response2 = template.postForEntity(url, httpEntity, String.class);
 		
-		logger.warn("获取登录页面Body");
+		//logger.warn("获取登录页面Body");
 
 		return response2.getBody();
 	}
