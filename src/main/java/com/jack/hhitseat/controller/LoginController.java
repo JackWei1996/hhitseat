@@ -138,8 +138,10 @@ public class LoginController {
     public String index(Model model) {
     	Long c = logServiceImpl.getAllCount();
     	Long u = userService.getAllUserByDoCount();
+    	Long s = logServiceImpl.getSuccessNumb();
     	model.addAttribute("c", c+2000);
     	model.addAttribute("u", u);
+    	model.addAttribute("s", s);
     	return "index";
     }
     

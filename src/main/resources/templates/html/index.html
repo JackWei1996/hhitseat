@@ -18,7 +18,8 @@ input::-webkit-input-placeholder {
 .div-a{ position:fixed; left:10px; top:20px; background:#00F;padding: 10px;color: #FFF;z-index: 999}  
 .div-b{ position:fixed; right:10px; top:20px; background:#F00;padding: 10px;color: #FFF;z-index: 999}  
 .div-c{ position:fixed; left:150px; top:60px; padding: 10px;color: #FFF;z-index: 999}  
-.div-d{ position:fixed; right:150px; top:60px; padding: 10px;color: #FFF;z-index: 999}  
+.div-d{ position:fixed; right:150px; top:40px; padding: 10px;color: #FFF;z-index: 999}  
+.div-e{ position:fixed; right:150px; top:80px; padding: 10px;color: #FFF;z-index: 999}  
 </style>
 
 </head>
@@ -41,8 +42,9 @@ input::-webkit-input-placeholder {
 		<a href="/jz">
 			<div class="div-b">点我捐助服务器</div>   
 		</a>
-		<div class="div-c" ><h1 id="countNum" style="color: #AE00AE	">累计成功抢座：XXXX次</h1></div>
+		<div class="div-c" ><h1 id="countNum" style="color: #796400">累计成功抢座：XXXX次</h1></div>
 		<div class="div-d" ><h1 id="countUserNum" style="color: #AE00AE	">当前抢座人数：XXXX人</h1></div>
+		<div class="div-e" ><h1 id="countSussNum" style="color: #003D79	">今日成功人数：XXXX人</h1></div>
 		<h1 style="margin-bottom:0.2em;color:#AE0000" id="djs">X天X时X分X秒 将关闭系统</h1>
 		<div class="login-top">
 <pre style="color:#000; font-weight:bold; text-align: center;">
@@ -84,6 +86,7 @@ input::-webkit-input-placeholder {
 <script type="text/javascript"  th:inline="javascript">
 var countNum = [[${c}]];
 var countUserNum = [[${u}]];
+var countSussNum = [[${s}]];
 var coloseTime = "2019-12-25 12:00:00";
 
 
@@ -112,6 +115,7 @@ function getDjs(time){
 $(function(){
 	$("#countNum").html("累计成功抢座："+ countNum +"次");
 	$("#countUserNum").html("当前抢座人数："+ countUserNum +"人");
+	$("#countSussNum").html("今日成功人数："+ countSussNum +"人");
 	
 	$("#djs").html(getDjs(coloseTime));
 	setInterval(function() {

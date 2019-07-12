@@ -75,11 +75,11 @@ public class MyTask {
 	@Scheduled(cron = "0 30 6 * * ? ")		//暑期抢座时间。
     @Scheduled(cron = "0 30 8 * * ? ")
 	public void myTask() {
-    	logger.warn("------启动抢座");
     	if(users.size()==0) {
     		init();
     	}
     	if(successCount <= 0) {
+    		logger.warn("------启动抢座");
     		for (User u : users) {
     			//多线程抢座
     			executorService.execute(new MyRunnable(u, sessionMap));
