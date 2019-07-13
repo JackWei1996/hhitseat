@@ -23,11 +23,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import com.jack.hhitseat.bean.Login;
 import com.jack.hhitseat.bean.User;
 import com.jack.hhitseat.service.HttpClient;
 import com.jack.hhitseat.service.impl.LogServiceImpl;
+import com.jack.hhitseat.service.impl.LoginServiceImpl;
 import com.jack.hhitseat.service.impl.UserServiceImpl;
 import com.jack.hhitseat.utils.LoginVerify;
+import com.jack.hhitseat.utils.MyUtils;
 
 /**
  * @author 19604
@@ -44,6 +47,8 @@ public class MyTask {
 	private UserServiceImpl userService;
 	@Autowired
 	private LogServiceImpl logService;
+	@Autowired
+	private LoginServiceImpl loginServiceImpl;
 	
 	private final Logger logger = LoggerFactory.getLogger(MyTask.class);
 	
@@ -118,6 +123,11 @@ public class MyTask {
 				it.remove();
 				user.setIsdo(0);
 				userService.updateUser(user);
+				Login login = new Login();
+				login.setUserId(Integer.parseInt(user.getStuNum()));
+				login.setIp(user.getUserName()+"--密码错误！");
+				login.setLoginTime(MyUtils.getNowDateTime());
+				loginServiceImpl.addLogin(login);
 			}
 			logger.warn("{}==={}", user.getUserName(), s);
     	}
