@@ -29,7 +29,7 @@ import com.jack.hhitseat.bean.AppBean;
  * Remark: <BR>
  * 
  * @version 1.00 2019年1月2日
- * @author Aisino)chenwei
+ * @author Aisino)Jack
  */
 @Configuration
 public class WebConfig {

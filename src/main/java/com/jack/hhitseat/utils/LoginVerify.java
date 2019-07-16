@@ -23,7 +23,7 @@ import com.jack.hhitseat.task.MyRunnable;
  * class name: LoginVerify <BR>
  * class description: please write your description <BR>
  * @version 1.0  2019年3月27日 下午4:39:10
- * @author Aisino)chenwei
+ * @author Aisino)Jack
  */
 public class LoginVerify {
 	

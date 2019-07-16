@@ -17,7 +17,7 @@ import java.util.HashMap;
  * class description: 返回前台结果 <BR>
  * Remark: <BR>
  * @version 1.00 2019年1月16日
- * @author Aisino)chenwei
+ * @author Aisino)Jack
  */
 @Component
 public class ResultMap extends HashMap<String, Object> {

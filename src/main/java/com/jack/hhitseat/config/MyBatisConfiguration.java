@@ -23,7 +23,7 @@ import org.springframework.core.io.ClassPathResource;
  * class description: MyBatis数据库配置 <BR>
  * Remark: <BR>
  * @version 1.00 2019年1月2日
- * @author Aisino)chenwei
+ * @author Aisino)Jack
  */
 @Configuration
 public class MyBatisConfiguration {

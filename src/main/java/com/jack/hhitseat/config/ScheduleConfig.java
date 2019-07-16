@@ -18,7 +18,7 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
  * class name: ScheduleConfig <BR>
  * class description: please write your description <BR>
  * @version 1.0  2019年3月28日 下午1:09:52
- * @author Aisino)chenwei
+ * @author Aisino)Jack
  */
 public class ScheduleConfig implements SchedulingConfigurer{
 	@Override

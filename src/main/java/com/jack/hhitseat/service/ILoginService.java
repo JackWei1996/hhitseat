@@ -15,7 +15,7 @@ import com.jack.hhitseat.bean.Login;
  * class name: ILoginService <BR>
  * class description: please write your description <BR>
  * @version 1.0  2019年3月29日 下午12:59:04
- * @author Aisino)chenwei
+ * @author Aisino)Jack
  */
 public interface ILoginService {
 	public void addLogin(Login login);

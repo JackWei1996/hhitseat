@@ -17,7 +17,7 @@ import org.springframework.context.ApplicationContextAware;
  * class name: AppBean <BR>
  * class description: please write your description <BR>
  * @version 1.0  2019年4月2日 上午10:03:10
- * @author Aisino)chenwei
+ * @author Aisino)Jack
  */
 public class AppBean implements ApplicationContextAware {
 

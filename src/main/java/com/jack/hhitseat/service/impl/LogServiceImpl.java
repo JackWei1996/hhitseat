@@ -27,7 +27,7 @@ import com.jack.hhitseat.utils.MyUtils;
  * class name: LogServiceImpl <BR>
  * class description: please write your description <BR>
  * @version 1.0  2019年3月29日 下午1:01:05
- * @author Aisino)chenwei
+ * @author Aisino)Jack
  */
 @Service("logServiceImpl")
 public class LogServiceImpl implements ILogService {

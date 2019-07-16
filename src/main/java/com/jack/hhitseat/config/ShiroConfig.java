@@ -25,7 +25,7 @@ import com.jack.hhitseat.shiro.CustomRealm;
  * class description: please write your description <BR>
  * Remark: <BR>
  * @version 1.00 2019年1月16日
- * @author Aisino)chenwei
+ * @author Aisino)Jack
  */
 @Configuration
 public class ShiroConfig {

@@ -22,7 +22,7 @@ import com.jack.hhitseat.service.ILoginService;
  * class name: LoginServiceImpl <BR>
  * class description: please write your description <BR>
  * @version 1.0  2019年3月29日 下午1:06:03
- * @author Aisino)chenwei
+ * @author Aisino)Jack
  */
 @Service
 public class LoginServiceImpl implements ILoginService {

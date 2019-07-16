@@ -42,7 +42,7 @@ import io.swagger.annotations.ApiOperation;
  * class description: 登录操作 <BR>
  * Remark: <BR>
  * @version 1.00 2019年1月16日
- * @author Aisino)chenwei
+ * @author Aisino)Jack
  */
 @Controller
 public class LoginController {
