@@ -32,10 +32,6 @@ import com.jack.hhitseat.service.impl.UserServiceImpl;
 import com.jack.hhitseat.utils.LoginVerify;
 import com.jack.hhitseat.utils.MyUtils;
 
-/**
- * @author 19604
- *
- */
 @Component
 @Controller
 @EnableScheduling   // 开启定时任务
@@ -65,11 +61,10 @@ public class MyTask {
 	//定时登录
 	@Scheduled(cron = "0 25 5 * * ?") 
 	@Scheduled(cron = "0 25 6 * * ?") 		//暑期抢座时间。
-	@Scheduled(cron = "0 20 9 * * ? ")
+	@Scheduled(cron = "0 25 8 * * ? ")
     public void dl2() {
 		successCount = logService.getSuccessNumb();
 		if(successCount <=0 ) {
-			//logger.warn("++++++启动登录");
 			init();
 			logger.warn("++++++结束登录");
 		}
@@ -78,7 +73,7 @@ public class MyTask {
 	//添加定时任务
     @Scheduled(cron = "0 30 5 * * ? ")
 	@Scheduled(cron = "0 30 6 * * ? ")		//暑期抢座时间。
-    @Scheduled(cron = "0 21 9 * * ? ")
+    @Scheduled(cron = "0 30 8 * * ? ")
 	public void myTask() {
     	if(users.size()==0) {
     		init();
@@ -95,7 +90,7 @@ public class MyTask {
 	//查看抢到座的人数
 	@Scheduled(cron = "0 50 5 * * ? ")
 	@Scheduled(cron = "0 50 6 * * ? ")		//暑期抢座时间。
-	//@Scheduled(cron = "0 50 8 * * ? ")
+	@Scheduled(cron = "0 50 8 * * ? ")
 	public void getResult() {
 		if(successCount <= 0) {
 			logger.warn("------结束抢座");
