@@ -65,7 +65,7 @@ public class MyTask {
 	//定时登录
 	@Scheduled(cron = "0 25 5 * * ?") 
 	@Scheduled(cron = "0 25 6 * * ?") 		//暑期抢座时间。
-	@Scheduled(cron = "0 25 8 * * ?")
+	@Scheduled(cron = "0 20 9 * * ? ")
     public void dl2() {
 		successCount = logService.getSuccessNumb();
 		if(successCount <=0 ) {
@@ -78,7 +78,7 @@ public class MyTask {
 	//添加定时任务
     @Scheduled(cron = "0 30 5 * * ? ")
 	@Scheduled(cron = "0 30 6 * * ? ")		//暑期抢座时间。
-    @Scheduled(cron = "0 30 8 * * ? ")
+    @Scheduled(cron = "0 21 9 * * ? ")
 	public void myTask() {
     	if(users.size()==0) {
     		init();
@@ -95,7 +95,7 @@ public class MyTask {
 	//查看抢到座的人数
 	@Scheduled(cron = "0 50 5 * * ? ")
 	@Scheduled(cron = "0 50 6 * * ? ")		//暑期抢座时间。
-	@Scheduled(cron = "0 50 8 * * ? ")
+	//@Scheduled(cron = "0 50 8 * * ? ")
 	public void getResult() {
 		if(successCount <= 0) {
 			logger.warn("------结束抢座");

@@ -40,7 +40,7 @@ public class MyRunnable extends Thread {
 	
 	private static  String url2 = "http://seat.hhit.edu.cn/ClientWeb/pro/ajax/reserve.aspx?" +
 			"&dev_id={dev_id}" + "&type={type}" + "&start={start}" + "&end={end}" +
-			"&start_time={start_time}" + "&end_time={end_time}" + "&act={act}" +
+			"&start_time={start_time}" + "&end_time={end_time}"+"&number={number}" + "&act={act}" +
 			"&_={_}"; 
 	
 	public MyRunnable() {
@@ -57,24 +57,12 @@ public class MyRunnable extends Thread {
 		String[] seats = tem.split(",");
 		for (String str : seats) {
 			String seat = str.split("=")[0];
-			String result = qz(sessionMap.get(u.getStuNum()),seat);
-			String msg = result.split("\"msg\":\"")[1].split("\",\"data\":")[0];
-			if(msg.contains("成功")) {
-				Log log = new Log();
-				log.setStatus(1);
-				log.setUserId(Integer.parseInt(u.getStuNum()));
-				log.setCreateTime(MyUtils.getNowDateTime());
-				log.setCount(Integer.parseInt(seat));
-				logServiceImpl.addLog(log);
-				break;
-			}else if(msg.contains("未登录")) {
-				logger.warn("Session超时==={}",u.getUserName());
-				MyTask task = new MyTask();
-				String session = task.login(u.getStuNum(), u.getPassword());
-				sessionMap.put(u.getStuNum(), session);
-				seat = str.split("=")[0];
-				result = qz(session,seat);
-				msg = result.split("\"msg\":\"")[1].split("\",\"data\":")[0];
+			int i = 0;
+			//循环次数
+			final int COUNT = 60;
+			for (i = 0; i < COUNT; i++) {
+				String result = qz(sessionMap.get(u.getStuNum()),seat);
+				String msg = result.split("\"msg\":\"")[1].split("\",\"data\":")[0];
 				if(msg.contains("成功")) {
 					Log log = new Log();
 					log.setStatus(1);
@@ -83,81 +71,53 @@ public class MyRunnable extends Thread {
 					log.setCount(Integer.parseInt(seat));
 					logServiceImpl.addLog(log);
 					break;
+				}else if(msg.contains("未登录")) {
+					logger.warn("Session超时==={}",u.getUserName());
+					MyTask task = new MyTask();
+					String session = task.login(u.getStuNum(), u.getPassword());
+					sessionMap.put(u.getStuNum(), session);
+					seat = str.split("=")[0];
+					result = qz(session,seat);
+					msg = result.split("\"msg\":\"")[1].split("\",\"data\":")[0];
+					if(msg.contains("成功")) {
+						Log log = new Log();
+						log.setStatus(1);
+						log.setUserId(Integer.parseInt(u.getStuNum()));
+						log.setCreateTime(MyUtils.getNowDateTime());
+						log.setCount(Integer.parseInt(seat));
+						logServiceImpl.addLog(log);
+						break;
+					}
 				}
+				logger.warn("{}==={}==={}==={}",i,u.getUserName(),msg,str.split("=")[1]);			
 			}
-			logger.warn("{}==={}==={}",u.getUserName(),msg,str.split("=")[1]);
+			if(i < COUNT) {
+				break;
+			}
 		}
 	}
 	
 	
 	public String qz(String session, String seat) {
 
-		  String yyrq = MyUtils.getNextDate(); 
-
-		  Date d = MyUtils.String2Date(yyrq);
-		  
-		  Calendar cal = Calendar.getInstance();
-		  cal.setTime(d);
-		  int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
-
-		  String r = "";
-		  String r1 = "";//上午
-
-		if(w==3) {
-			String sjc = System.currentTimeMillis()+"";
-			
-			Map<String, Object> qzParparamMap = new HashMap<String, Object>();
-			
-			qzParparamMap.put("dev_id", seat); 
-			qzParparamMap.put("type","dev");
-			qzParparamMap.put("start",yyrq+"+08:00");
-			qzParparamMap.put("end",yyrq+"+14:00");
-			qzParparamMap.put("start_time","800"); 
-			qzParparamMap.put("end_time","1400");
-			qzParparamMap.put("act","set_resv"); 
-			qzParparamMap.put("_",sjc);
-			
-			r1 = httpClient.qz2(url2, session, qzParparamMap);
-			
-			sjc = System.currentTimeMillis()+"";
-			
-			Map<String, Object> qzParparamMap2 = new HashMap<String, Object>();
-			
-			qzParparamMap2.put("dev_id", seat); 
-			qzParparamMap2.put("type","dev");
-			qzParparamMap2.put("start",yyrq+"+17:30");
-			//qzParparamMap2.put("end",yyrq+"+22:00");
-			qzParparamMap2.put("end",yyrq+"+21:00");//暑假时间
-			qzParparamMap2.put("start_time","1730"); 
-			//qzParparamMap2.put("end_time","2200");
-			qzParparamMap2.put("end_time","2100");		//暑假时间
-			qzParparamMap2.put("act","set_resv"); 
-			qzParparamMap2.put("_",sjc);
-
-			r = httpClient.qz2(url2, session, qzParparamMap2);
-			//上午预约不成功问题
-			if(r1.contains("冲突")) {
-				//{"ret":0,"act":"set_resv","msg":"2019-2-28 预约与现有预约冲突","data":null,"ext":null}
-				r = "{\"ret\":0,\"act\":\"set_resv\",\"msg\":\"预约与现有预约冲突\",\"data\":null,\"ext\":null}";
-			}
-		}else {
-			String sjc = System.currentTimeMillis()+"";
-			
-			Map<String, Object> qzParparamMap = new HashMap<String, Object>();
-			
-			qzParparamMap.put("dev_id", seat); 
-			qzParparamMap.put("type","dev");
-			qzParparamMap.put("start",yyrq+"+08:00");
-			//qzParparamMap.put("end",yyrq+"+22:00");
-			qzParparamMap.put("end",yyrq+"+21:00");//暑假时间
-			qzParparamMap.put("start_time","800"); 
-			//qzParparamMap.put("end_time","2200");
-			qzParparamMap.put("end_time","2100");		//暑假时间
-			qzParparamMap.put("act","set_resv");
-			qzParparamMap.put("_",sjc);
-			
-			r = httpClient.qz2(url2, session, qzParparamMap);
-		}
-		return r;
+		String yyrq = MyUtils.getNextDate(); 
+		String sjc = System.currentTimeMillis()+"";
+		httpClient.yzm(session);
+		
+		Map<String, Object> qzParparamMap = new HashMap<String, Object>();
+		
+		qzParparamMap.put("dev_id", seat); 
+		qzParparamMap.put("type","dev");
+		qzParparamMap.put("start",yyrq+"+08:00");
+		//qzParparamMap.put("end",yyrq+"+22:00");
+		qzParparamMap.put("end",yyrq+"+21:00");//暑假时间
+		qzParparamMap.put("start_time","800"); 
+		//qzParparamMap.put("end_time","2200");
+		qzParparamMap.put("end_time","2100");		//暑假时间
+		qzParparamMap.put("number","0");
+		qzParparamMap.put("act","set_resv");
+		qzParparamMap.put("_",sjc);
+		
+		return httpClient.qz2(url2, session, qzParparamMap);
   }
 }

@@ -114,6 +114,32 @@ public class HttpClient {
 		return response.getBody();
 	}
 	
+	public void yzm(String session) {
+		String url = "http://seat.hhit.edu.cn/ClientWeb/pro/page/image.aspx";
+		RestTemplate template = new RestTemplate();
+		HttpHeaders header = new HttpHeaders();
+		
+		header.set("Accept","application/json, text/javascript, */*; q=0.01");
+		header.set("Accept-Encoding","gzip, deflate");
+		header.set("Accept-Language","zh-CN,zh;q=0.9");
+		header.set("Connection","keep-alive");
+		header.set("Cookie","ASP.NET_SessionId="+session);
+		header.set("Host","seat.hhit.edu.cn");
+		header.set("Referer","http://seat.hhit.edu.cn/ClientWeb/xcus/ic2/Default.aspx");
+		header.set("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36");
+		header.set("X-Requested-With","XMLHttpRequest");
+
+		HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(null,header);
+
+		ResponseEntity<String> response = null;
+		try {
+			response = template.exchange(url, HttpMethod.GET, httpEntity, String.class);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		//System.out.println(response.getBody());
+	}
+	
 	public String qz2(String url, String session, Map<String, Object> params) {
 		RestTemplate template = new RestTemplate();
 		HttpHeaders header = new HttpHeaders();
@@ -131,6 +157,7 @@ public class HttpClient {
 		HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(null,header);
 
 		ResponseEntity<String> response = null;
+		
 		try {
 			response = template.exchange(url, HttpMethod.GET, httpEntity, String.class, params);
 		} catch (Exception e) {
