@@ -46,7 +46,12 @@ public class LogServiceImpl implements ILogService {
 	* @param log  <BR>
 	*/
 	@Override
-	public void addLog(Log log) {
+	public void addLog(String stuNum, String seat) {
+		Log log = new Log();
+		log.setStatus(1);
+		log.setCreateTime(MyUtils.getNowDateTime());
+		log.setUserId(Integer.parseInt(stuNum));
+		log.setCount(Integer.parseInt(seat));
 		try {
 			logMapper.insert(log);
 		} catch (Exception e) {

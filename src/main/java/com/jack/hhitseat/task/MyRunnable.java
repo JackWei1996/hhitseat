@@ -35,8 +35,10 @@ public class MyRunnable extends Thread {
 	private static final Logger logger = LoggerFactory.getLogger(MyRunnable.class);
 	private static LogServiceImpl logServiceImpl = (LogServiceImpl) AppBean.getBean("logServiceImpl");
 	private static HttpClient httpClient = new HttpClient();
-	private Map<String, String> sessionMap = new HashMap<>();
+	private String session;
+	private String[] seats;
 	private User u;
+	private Map<String, Object> qzParparamMap = new HashMap<String, Object>();
 	
 	private static  String url2 = "http://seat.hhit.edu.cn/ClientWeb/pro/ajax/reserve.aspx?" +
 			"&dev_id={dev_id}" + "&type={type}" + "&start={start}" + "&end={end}" +
@@ -46,76 +48,46 @@ public class MyRunnable extends Thread {
 	public MyRunnable() {
 	}
 	
-	public MyRunnable(User u, Map<String, String> sessionMap ) {
+	public MyRunnable(User u
+			, String session 
+			, String[] seats
+			, Map<String, Object> qzParparamMap) {
 		this.u = u;
-		this.sessionMap = sessionMap;
+		this.session = session;
+		this.seats = seats;
+		this.qzParparamMap =qzParparamMap;
 	}
 	
 	@Override
 	public void run() {
-		String tem = u.getSeat();
-		String[] seats = tem.split(",");
 		for (String str : seats) {
 			String seat = str.split("=")[0];
 			int i = 0;
+			boolean success = false;
 			//循环次数
-			final int COUNT = 60;
+			final int COUNT = 80;
 			for (i = 0; i < COUNT; i++) {
-				String result = qz(sessionMap.get(u.getStuNum()),seat);
+				String result = qz(session, seat);
 				String msg = result.split("\"msg\":\"")[1].split("\",\"data\":")[0];
 				if(msg.contains("成功")) {
-					Log log = new Log();
-					log.setStatus(1);
-					log.setUserId(Integer.parseInt(u.getStuNum()));
-					log.setCreateTime(MyUtils.getNowDateTime());
-					log.setCount(Integer.parseInt(seat));
-					logServiceImpl.addLog(log);
+					logServiceImpl.addLog(u.getStuNum(), seat);
+					success = true;
 					break;
-				}else if(msg.contains("未登录")) {
-					logger.warn("Session超时==={}",u.getUserName());
-					MyTask task = new MyTask();
-					String session = task.login(u.getStuNum(), u.getPassword());
-					sessionMap.put(u.getStuNum(), session);
-					seat = str.split("=")[0];
-					result = qz(session,seat);
-					msg = result.split("\"msg\":\"")[1].split("\",\"data\":")[0];
-					if(msg.contains("成功")) {
-						Log log = new Log();
-						log.setStatus(1);
-						log.setUserId(Integer.parseInt(u.getStuNum()));
-						log.setCreateTime(MyUtils.getNowDateTime());
-						log.setCount(Integer.parseInt(seat));
-						logServiceImpl.addLog(log);
-						break;
-					}
+				}else if(msg.contains("冲突")) {
+					logger.warn("{}==={}==={}==={}", i+1, u.getUserName(), msg, str.split("=")[1]);			
+					break;
 				}
-				logger.warn("{}==={}==={}==={}",i,u.getUserName(),msg,str.split("=")[1]);			
 			}
-			if(i < COUNT) {
+			if(success) {
 				break;
 			}
 		}
 	}
 	
-	
 	public String qz(String session, String seat) {
-
-		String yyrq = MyUtils.getNextDate(); 
 		String sjc = System.currentTimeMillis()+"";
 		httpClient.yzm(session);
-		
-		Map<String, Object> qzParparamMap = new HashMap<String, Object>();
-		
 		qzParparamMap.put("dev_id", seat); 
-		qzParparamMap.put("type","dev");
-		qzParparamMap.put("start",yyrq+"+08:00");
-		//qzParparamMap.put("end",yyrq+"+22:00");
-		qzParparamMap.put("end",yyrq+"+21:00");//暑假时间
-		qzParparamMap.put("start_time","800"); 
-		//qzParparamMap.put("end_time","2200");
-		qzParparamMap.put("end_time","2100");		//暑假时间
-		qzParparamMap.put("number","0");
-		qzParparamMap.put("act","set_resv");
 		qzParparamMap.put("_",sjc);
 		
 		return httpClient.qz2(url2, session, qzParparamMap);

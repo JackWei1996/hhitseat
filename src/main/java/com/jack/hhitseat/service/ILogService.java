@@ -18,6 +18,6 @@ import com.jack.hhitseat.bean.Log;
  * @author Aisino)Jack
  */
 public interface ILogService {
-	public void addLog(Log log);
 	public Long getAllCount();
+	void addLog(String stuNum, String seat);
 }

@@ -48,7 +48,9 @@ public class MyTask {
 	
 	private final Logger logger = LoggerFactory.getLogger(MyTask.class);
 	
-	private static Map<String, String> sessionMap = new HashMap<>();
+	private Map<String, String> sessionMap = new HashMap<>();
+	private Map<String, String[]> seatMap = new HashMap<>();
+	private Map<String, Object> qzParparamMap = new HashMap<String, Object>();
 	private static String VIEWSTATE = null;
 	private static String EVENTVALIDATION = null;
 	//线程池--设置线程数
@@ -64,13 +66,13 @@ public class MyTask {
 	@Scheduled(cron = "0 25 8 * * ? ")
     public void dl2() {
 		successCount = logService.getSuccessNumb();
-		if(successCount <=0 ) {
+		if(successCount <= 0 ) {
 			init();
 			logger.warn("++++++结束登录");
 		}
     }
 	
-	//添加定时任务
+	//定时抢座
     @Scheduled(cron = "0 30 5 * * ? ")
 	@Scheduled(cron = "0 30 6 * * ? ")		//暑期抢座时间。
     @Scheduled(cron = "0 30 8 * * ? ")
@@ -82,7 +84,11 @@ public class MyTask {
     		logger.warn("------启动抢座");
     		for (User u : users) {
     			//多线程抢座
-    			executorService.execute(new MyRunnable(u, sessionMap));
+    			executorService.execute(
+    					new MyRunnable(u, sessionMap.get(u.getStuNum())
+    							, seatMap.get(u.getStuNum())
+    							, qzParparamMap)
+    					);
     		}
     	}
 	}
@@ -112,8 +118,13 @@ public class MyTask {
     	while(it.hasNext()){
     		User user = it.next();
     		String s = login(user.getStuNum(), user.getPassword());
-			if(!s.equals("LOGIN_ERR")) {//正常
-				sessionMap.put(user.getStuNum(), s);
+    		//登录正常
+			if(!s.equals("LOGIN_ERR")) {
+				String stuNum = user.getStuNum();
+				//获取放入学号和Session
+				sessionMap.put(stuNum, s);
+				//获取学号，和对应的座位
+				seatMap.put(stuNum, user.getSeat().split(","));
 			}else {
 				it.remove();
 				user.setIsdo(0);
@@ -126,6 +137,17 @@ public class MyTask {
 			}
 			logger.warn("{}==={}", user.getUserName(), s);
     	}
+    	
+    	String yyrq = MyUtils.getNextDate(); 
+		qzParparamMap.put("type","dev");
+		qzParparamMap.put("start",yyrq+"+08:00");
+		//qzParparamMap.put("end",yyrq+"+22:00");
+		qzParparamMap.put("end",yyrq+"+21:00");//暑假时间
+		qzParparamMap.put("start_time","800"); 
+		//qzParparamMap.put("end_time","2200");
+		qzParparamMap.put("end_time","2100");		//暑假时间
+		qzParparamMap.put("number","0");
+		qzParparamMap.put("act","set_resv");
     }
     
     public String login(String stuNum, String pass) {
