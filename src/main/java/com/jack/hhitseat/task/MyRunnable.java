@@ -1,6 +1,4 @@
-
- /*
- * All rights Reserved, Copyright (C) Aisino LIMITED 2019
+ /** All rights Reserved, Copyright (C) Aisino LIMITED 2019
  * FileName: MyRunnable.java
  * Version:  1.0
  * Modify record:
@@ -9,8 +7,6 @@
  */
 package com.jack.hhitseat.task;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,11 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.jack.hhitseat.bean.AppBean;
-import com.jack.hhitseat.bean.Log;
 import com.jack.hhitseat.bean.User;
 import com.jack.hhitseat.service.HttpClient;
 import com.jack.hhitseat.service.impl.LogServiceImpl;
-import com.jack.hhitseat.utils.MyUtils;
 
 /**
  * class name: MyRunnable <BR>
@@ -64,22 +58,28 @@ public class MyRunnable extends Thread {
 			String seat = str.split("=")[0];
 			int i = 0;
 			boolean success = false;
+			String result = "";
 			//循环次数
 			final int COUNT = 80;
-			for (i = 0; i < COUNT; i++) {
-				String result = qz(session, seat);
-				String msg = result.split("\"msg\":\"")[1].split("\",\"data\":")[0];
-				if(msg.contains("成功")) {
+			for (i = 1; i <= COUNT; i++) {
+				result = qz(session, seat);
+				if(result.contains("成功")) {
 					logServiceImpl.addLog(u.getStuNum(), seat);
 					success = true;
 					break;
-				}else if(msg.contains("冲突")) {
-					logger.warn("{}==={}==={}==={}", i+1, u.getUserName(), msg, str.split("=")[1]);			
+				}else if(result.contains("冲突")) {
+					logger.warn("{}==={}==={}==={}", i, u.getUserName()
+							, result.split("\"msg\":\"")[1].split("\",\"data\":")[0]
+							, str.split("=")[1]);	
 					break;
 				}
 			}
 			if(success) {
 				break;
+			} else if(i > 80) {
+				logger.warn("{}==={}==={}==={}", i, u.getUserName()
+						, result.split("\"msg\":\"")[1].split("\",\"data\":")[0]
+						, str.split("=")[1]);
 			}
 		}
 	}

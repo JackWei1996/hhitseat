@@ -64,6 +64,7 @@ public class MyTask {
 	@Scheduled(cron = "0 25 5 * * ?") 
 	@Scheduled(cron = "0 25 6 * * ?") 		//暑期抢座时间。
 	@Scheduled(cron = "0 25 8 * * ? ")
+	//@Scheduled(cron = "0 24 14 * * ? ")	//测试时间
     public void dl2() {
 		successCount = logService.getSuccessNumb();
 		if(successCount <= 0 ) {
@@ -76,6 +77,7 @@ public class MyTask {
     @Scheduled(cron = "0 30 5 * * ? ")
 	@Scheduled(cron = "0 30 6 * * ? ")		//暑期抢座时间。
     @Scheduled(cron = "0 30 8 * * ? ")
+    //@Scheduled(cron = "0 25 14 * * ? ")	//测试时间
 	public void myTask() {
     	if(users.size()==0) {
     		init();
@@ -107,9 +109,9 @@ public class MyTask {
     
     public void init() {
     	sessionMap.clear();
+    	users.clear();
     	VIEWSTATE = null;
     	EVENTVALIDATION = null;
-    	users.clear();
     	
     	users = userService.getAllUserByDo();
     	logger.warn("本次抢座人数==={}", users.size());

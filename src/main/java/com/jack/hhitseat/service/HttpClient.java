@@ -15,12 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import com.jack.hhitseat.task.MyTask;
-
-/**
- * @author 19604
- *
- */
 @Service
 public class HttpClient {
 	private final Logger logger = LoggerFactory.getLogger(HttpClient.class);
