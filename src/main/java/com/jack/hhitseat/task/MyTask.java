@@ -63,8 +63,8 @@ public class MyTask {
 	//定时登录
 	@Scheduled(cron = "0 25 5 * * ?") 
 	@Scheduled(cron = "0 25 6 * * ?") 		//暑期抢座时间。
-	@Scheduled(cron = "0 25 8 * * ? ")
-	//@Scheduled(cron = "0 24 14 * * ? ")	//测试时间
+	//@Scheduled(cron = "0 25 8 * * ? ")
+	//@Scheduled(cron = "0 15 8 * * ? ")	//测试时间
     public void dl2() {
 		successCount = logService.getSuccessNumb();
 		if(successCount <= 0 ) {
@@ -76,8 +76,8 @@ public class MyTask {
 	//定时抢座
     @Scheduled(cron = "0 30 5 * * ? ")
 	@Scheduled(cron = "0 30 6 * * ? ")		//暑期抢座时间。
-    @Scheduled(cron = "0 30 8 * * ? ")
-    //@Scheduled(cron = "0 25 14 * * ? ")	//测试时间
+    //@Scheduled(cron = "0 30 8 * * ? ")
+    //@Scheduled(cron = "0 16 8 * * ? ")	//测试时间
 	public void myTask() {
     	if(users.size()==0) {
     		init();
@@ -98,7 +98,7 @@ public class MyTask {
 	//查看抢到座的人数
 	@Scheduled(cron = "0 50 5 * * ? ")
 	@Scheduled(cron = "0 50 6 * * ? ")		//暑期抢座时间。
-	@Scheduled(cron = "0 50 8 * * ? ")
+	//@Scheduled(cron = "0 50 8 * * ? ")
 	public void getResult() {
 		if(successCount <= 0) {
 			logger.warn("------结束抢座");
@@ -144,11 +144,11 @@ public class MyTask {
 		qzParparamMap.put("type","dev");
 		qzParparamMap.put("start",yyrq+"+08:00");
 		//qzParparamMap.put("end",yyrq+"+22:00");
-		qzParparamMap.put("end",yyrq+"+21:00");//暑假时间
+		qzParparamMap.put("end",yyrq+"+21:00");		//暑假时间
 		qzParparamMap.put("start_time","800"); 
 		//qzParparamMap.put("end_time","2200");
 		qzParparamMap.put("end_time","2100");		//暑假时间
-		qzParparamMap.put("number","0");
+		qzParparamMap.put("number", "10");			//万能钥匙Key
 		qzParparamMap.put("act","set_resv");
     }
     

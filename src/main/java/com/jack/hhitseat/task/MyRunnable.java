@@ -60,7 +60,7 @@ public class MyRunnable extends Thread {
 			boolean success = false;
 			String result = "";
 			//循环次数
-			final int COUNT = 80;
+			final int COUNT = 100;
 			for (i = 1; i <= COUNT; i++) {
 				result = qz(session, seat);
 				if(result.contains("成功")) {
