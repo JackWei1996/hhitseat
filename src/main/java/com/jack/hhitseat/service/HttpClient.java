@@ -102,18 +102,20 @@ public class HttpClient {
 	}
 	
 	public String qz2(String url, String session, Map<String, Object> params) {
+		//logger.warn("session=="+session+"==seat=="+params.get("dev_id"));
+		
 		RestTemplate template = new RestTemplate();
 		header.set("Cookie","ASP.NET_SessionId="+session);
 		HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(null,header);
-
+		  
 		ResponseEntity<String> response = null;
-		
-		try {
-			response = template.exchange(url, HttpMethod.GET, httpEntity, String.class, params);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return response.getBody();
+		  
+		try { 
+			response = template.exchange(url, HttpMethod.GET, httpEntity,
+			String.class, params);
+		} catch (Exception e) { e.printStackTrace(); }
+		  
+		  	return response.getBody();
+		 
 	}
 }

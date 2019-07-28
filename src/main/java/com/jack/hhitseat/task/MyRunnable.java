@@ -26,15 +26,14 @@ import com.jack.hhitseat.service.impl.LogServiceImpl;
  */
 //为了线程安全，不能依赖注入！！！
 public class MyRunnable extends Thread {
-	private static final Logger logger = LoggerFactory.getLogger(MyRunnable.class);
-	private static LogServiceImpl logServiceImpl = (LogServiceImpl) AppBean.getBean("logServiceImpl");
+	private final Logger logger = LoggerFactory.getLogger(MyRunnable.class);
 	private static HttpClient httpClient = new HttpClient();
-	private String session;
-	private String[] seats;
+	private static LogServiceImpl logServiceImpl = (LogServiceImpl) AppBean.getBean("logServiceImpl");
 	private User u;
+	private Map<String, String> sessionMap = new HashMap<>();
 	private Map<String, Object> qzParparamMap = new HashMap<String, Object>();
 	
-	private static  String url2 = "http://seat.hhit.edu.cn/ClientWeb/pro/ajax/reserve.aspx?" +
+	private final static  String BOOK_URL = "http://seat.hhit.edu.cn/ClientWeb/pro/ajax/reserve.aspx?" +
 			"&dev_id={dev_id}" + "&type={type}" + "&start={start}" + "&end={end}" +
 			"&start_time={start_time}" + "&end_time={end_time}"+"&number={number}" + "&act={act}" +
 			"&_={_}"; 
@@ -43,53 +42,35 @@ public class MyRunnable extends Thread {
 	}
 	
 	public MyRunnable(User u
-			, String session 
-			, String[] seats
+			, Map<String, String> sessionMap
 			, Map<String, Object> qzParparamMap) {
 		this.u = u;
-		this.session = session;
-		this.seats = seats;
+		this.sessionMap = sessionMap;
 		this.qzParparamMap =qzParparamMap;
 	}
 	
 	@Override
-	public void run() {
+	public synchronized void run() {
+		String stuNum = u.getStuNum();
+		String[] seats = u.getSeat().split(",");
 		for (String str : seats) {
 			String seat = str.split("=")[0];
-			int i = 0;
-			boolean success = false;
 			String result = "";
-			//循环次数
-			final int COUNT = 100;
-			for (i = 1; i <= COUNT; i++) {
-				result = qz(session, seat);
-				if(result.contains("成功")) {
-					logServiceImpl.addLog(u.getStuNum(), seat);
-					success = true;
-					break;
-				}else if(result.contains("冲突")) {
-					logger.warn("{}==={}==={}==={}", i, u.getUserName()
-							, result.split("\"msg\":\"")[1].split("\",\"data\":")[0]
-							, str.split("=")[1]);	
-					break;
-				}
-			}
-			if(success) {
+			String sjc = System.currentTimeMillis()+"";
+			qzParparamMap.put("dev_id", seat); 
+			qzParparamMap.put("_",sjc);
+			
+			result = httpClient.qz2(BOOK_URL, sessionMap.get(stuNum), qzParparamMap);
+			
+			if(result.contains("成功")) {
+				logServiceImpl.addLog(u.getStuNum(), seat);
 				break;
-			} else if(i > 80) {
-				logger.warn("{}==={}==={}==={}", i, u.getUserName()
-						, result.split("\"msg\":\"")[1].split("\",\"data\":")[0]
-						, str.split("=")[1]);
 			}
+			//测试输出
+			logger.warn("{}==={}==={}", u.getUserName()
+					, result.split("\"msg\":\"")[1].split("\",\"data\":")[0]
+					, str.split("=")[1]);
 		}
-	}
-	
-	public String qz(String session, String seat) {
-		String sjc = System.currentTimeMillis()+"";
-		httpClient.yzm(session);
-		qzParparamMap.put("dev_id", seat); 
-		qzParparamMap.put("_",sjc);
 		
-		return httpClient.qz2(url2, session, qzParparamMap);
-  }
+	}
 }

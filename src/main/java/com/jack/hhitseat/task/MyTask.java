@@ -48,9 +48,9 @@ public class MyTask {
 	
 	private final Logger logger = LoggerFactory.getLogger(MyTask.class);
 	
-	private Map<String, String> sessionMap = new HashMap<>();
-	private Map<String, String[]> seatMap = new HashMap<>();
-	private Map<String, Object> qzParparamMap = new HashMap<String, Object>();
+	private static Map<String, String> sessionMap = new HashMap<>();
+	private static Map<String, String[]> seatMap = new HashMap<>();
+	private static Map<String, Object> qzParparamMap = new HashMap<String, Object>();
 	private static String VIEWSTATE = null;
 	private static String EVENTVALIDATION = null;
 	//线程池--设置线程数
@@ -60,11 +60,13 @@ public class MyTask {
 	
 	private long successCount = 0;
 	
+	private final static String KEY = "16";
+	
 	//定时登录
 	@Scheduled(cron = "0 25 5 * * ?") 
 	@Scheduled(cron = "0 25 6 * * ?") 		//暑期抢座时间。
 	//@Scheduled(cron = "0 25 8 * * ? ")
-	//@Scheduled(cron = "0 15 8 * * ? ")	//测试时间
+	//@Scheduled(cron = "0 11 12 * * ? ")	//测试时间
     public void dl2() {
 		successCount = logService.getSuccessNumb();
 		if(successCount <= 0 ) {
@@ -73,22 +75,37 @@ public class MyTask {
 		}
     }
 	
+	//请求对的验证码
+	@Scheduled(cron = "0 27 5 * * ?") 
+	@Scheduled(cron = "0 27 6 * * ?") 		//暑期抢座时间。
+	//@Scheduled(cron = "0 25 8 * * ? ")
+	//@Scheduled(cron = "30 11 12 * * ? ")	//测试时间
+    public void qqyzm() {
+		logger.warn("++++++请求验证码");
+		if(users.size()==0) {
+    		init();
+    	}
+		if(successCount <= 0) {
+			for (User user : users) {
+				executorService.execute(
+						new YzmRunnable(user, sessionMap, qzParparamMap)
+						);
+			}
+		}
+    }
+	
 	//定时抢座
     @Scheduled(cron = "0 30 5 * * ? ")
 	@Scheduled(cron = "0 30 6 * * ? ")		//暑期抢座时间。
     //@Scheduled(cron = "0 30 8 * * ? ")
-    //@Scheduled(cron = "0 16 8 * * ? ")	//测试时间
+    //@Scheduled(cron = "0 12 12 * * ? ")	//测试时间
 	public void myTask() {
-    	if(users.size()==0) {
-    		init();
-    	}
     	if(successCount <= 0) {
     		logger.warn("------启动抢座");
     		for (User u : users) {
     			//多线程抢座
     			executorService.execute(
-    					new MyRunnable(u, sessionMap.get(u.getStuNum())
-    							, seatMap.get(u.getStuNum())
+    					new MyRunnable(u, sessionMap
     							, qzParparamMap)
     					);
     		}
@@ -109,6 +126,8 @@ public class MyTask {
     
     public void init() {
     	sessionMap.clear();
+    	seatMap.clear();
+    	qzParparamMap.clear();
     	users.clear();
     	VIEWSTATE = null;
     	EVENTVALIDATION = null;
@@ -119,12 +138,12 @@ public class MyTask {
     	Iterator<User> it = users.iterator();
     	while(it.hasNext()){
     		User user = it.next();
-    		String s = login(user.getStuNum(), user.getPassword());
+    		String sission = login(user.getStuNum(), user.getPassword());
     		//登录正常
-			if(!s.equals("LOGIN_ERR")) {
+			if(!sission.equals("LOGIN_ERR")) {
 				String stuNum = user.getStuNum();
 				//获取放入学号和Session
-				sessionMap.put(stuNum, s);
+				sessionMap.put(stuNum, sission);
 				//获取学号，和对应的座位
 				seatMap.put(stuNum, user.getSeat().split(","));
 			}else {
@@ -137,7 +156,7 @@ public class MyTask {
 				login.setLoginTime(MyUtils.getNowDateTime());
 				loginServiceImpl.addLogin(login);
 			}
-			logger.warn("{}==={}", user.getUserName(), s);
+			logger.warn("{}==={}", user.getUserName(), sission);
     	}
     	
     	String yyrq = MyUtils.getNextDate(); 
@@ -148,7 +167,7 @@ public class MyTask {
 		qzParparamMap.put("start_time","800"); 
 		//qzParparamMap.put("end_time","2200");
 		qzParparamMap.put("end_time","2100");		//暑假时间
-		qzParparamMap.put("number", "10");			//万能钥匙Key
+		qzParparamMap.put("number", KEY);			//万能钥匙Key
 		qzParparamMap.put("act","set_resv");
     }
     
@@ -156,8 +175,6 @@ public class MyTask {
     	if(VIEWSTATE==null || EVENTVALIDATION==null) {
 			VIEWSTATE = LoginVerify.getVIEWSTATE();
 			EVENTVALIDATION = LoginVerify.getEVENTVALIDATION();
-		    logger.warn("VIEWSTATE ==== {}", VIEWSTATE);
-		    logger.warn("EVENTVALIDATION ==== {}", EVENTVALIDATION);
 		}
     	 String url = "http://seat.hhit.edu.cn/pages/ic/LoginForm.aspx"; 
 		  HttpMethod method = HttpMethod.POST; 
