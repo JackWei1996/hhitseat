@@ -66,7 +66,7 @@ public class MyTask {
 	@Scheduled(cron = "0 25 5 * * ?") 
 	@Scheduled(cron = "0 25 6 * * ?") 		//暑期抢座时间。
 	//@Scheduled(cron = "0 25 8 * * ? ")
-	//@Scheduled(cron = "0 11 12 * * ? ")	//测试时间
+	@Scheduled(cron = "0 40 9 * * ? ")	//测试时间
     public void dl2() {
 		successCount = logService.getSuccessNumb();
 		if(successCount <= 0 ) {
@@ -79,7 +79,7 @@ public class MyTask {
 	@Scheduled(cron = "0 27 5 * * ?") 
 	@Scheduled(cron = "0 27 6 * * ?") 		//暑期抢座时间。
 	//@Scheduled(cron = "0 25 8 * * ? ")
-	//@Scheduled(cron = "30 11 12 * * ? ")	//测试时间
+	@Scheduled(cron = "50 40 9 * * ? ")	//测试时间
     public void qqyzm() {
 		logger.warn("++++++请求验证码");
 		if(users.size()==0) {
@@ -98,7 +98,7 @@ public class MyTask {
     @Scheduled(cron = "0 30 5 * * ? ")
 	@Scheduled(cron = "0 30 6 * * ? ")		//暑期抢座时间。
     //@Scheduled(cron = "0 30 8 * * ? ")
-    //@Scheduled(cron = "0 12 12 * * ? ")	//测试时间
+    @Scheduled(cron = "0 41 9 * * ? ")	//测试时间
 	public void myTask() {
     	if(successCount <= 0) {
     		logger.warn("------启动抢座");
