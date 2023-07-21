@@ -91,7 +91,7 @@
 		<dependency>
 			<groupId>com.github.pagehelper</groupId>
 			<artifactId>pagehelper</artifactId>
-			<version>5.1.8</version>
+			<version>5.3.1</version>
 		</dependency>
 		<!-- springboot对mybatis的整合支持还是比较苛刻的，版本不兼容问题比较严重，pageHelper分页插件也是一样，不是最新的版本就没有问题，有时需要降低版本进行支持，这里的版本是调试通过可以用的版本，其他应该还有可以匹配的版本，但是没有去测试 -->
 		<!-- spring boot pagehelper autoconfigure依赖 版本有兼容性问题 第一种方式依赖的包 -->
